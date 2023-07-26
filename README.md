@@ -20,7 +20,6 @@
 
 ## 2/ Folder Structure
       - Section 1: Frontend
-         ``
          frontend/
          ├── node_modules
          ├── public
@@ -64,4 +63,3 @@
          ├── App.scss
          ├── main.tsx
          └── index.css
-         ``
