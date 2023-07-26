@@ -14,7 +14,7 @@
          + Nếu thông tin đăng nhập hợp lệ, ứng dụng phải cho phép người dùng truy cập vào danh sách công việc cá nhân của mình và các chức năng quản lý công việc.
          
       - Section 3: Quản lý công việc (Todo App)
-         +  Ứng dụng Todo App phải cho phép người dùng thêm, cập nhật, xóa và đánh dấu các công việc cần làm trong danh sách công việc và phân trang cho Todo List.
+         +  Ứng dụng Todo App phải cho phép người dùng thêm, cập nhật, xóa và đánh dấu các công việc cần làm trong danh sách công việc và phân trang cho danh sách công việc.
          + Danh sách công việc phải hiển thị tên công việc, mô tả, thời gian tạo và trạng thái (đã hoàn thành hoặc chưa hoàn thành).
          + Ứng dụng còn cho phép người dùng tìm kiếm/lọc danh sách công việc theo trạng thái đã hoàn thành hoặc chưa hoàn thành.
 
@@ -64,7 +64,3 @@
          ├── main.tsx
          └── index.css
 
-
-## 3/ Features
-- Thêm, cập nhật, tìm kiếm/lọc các công việc
-- Đăng ký/đăng nhập
