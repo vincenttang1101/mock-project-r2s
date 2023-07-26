@@ -21,47 +21,47 @@
 ## 2/ Folder Structure
       - Section 1: Frontend
          ``
-         frontend
-         node_modules
-         public
-         src
-            components (common)
-               Header
-                  index.tsx
-                  style.module.scss
-               Footer
-                  index.tsx
-                  style.module.scss
-               FormField
-                  index.tsx
-                  style.module.scss
-               NotFound
-                  index.tsx
-                  style.module.scss
-               index.ts (entry point)
-         screens
-            TodoList
-               components
-               Title
-                  index.tsx
-                  style.module.scss
-               TodoItem
-                  index.tsx
-                  style.module.scss
-               Paginate
-                  index.tsx
-                  style.module.scss
-               index.tsx
-               style.module.scss
-            Login
-               index.tsx
-               style.module.scss
-            Register
-               index.tsx
-               style.module.scss
-            index.ts (entry point)
-         App.tsx
-         App.scss
-         main.tsx
-         index.css
+         frontend/
+         ├── node_modules
+         ├── public
+         ├── src/
+         │   └── components (common)/
+         │       ├── Header/
+         │       │   ├── index.tsx
+         │       │   └── style.module.scss
+         │       ├── Footer/
+         │       │   ├── index.tsx
+         │       │   └── style.module.scss
+         │       ├── FormField/
+         │       │   ├── index.tsx
+         │       │   └── style.module.scss
+         │       ├── NotFound/
+         │       │   ├── index.tsx
+         │       │   └── style.module.scss
+         │       └── index.ts (entry point)
+         ├── screens/
+         │   ├── TodoList/
+         │   │   ├── components/
+         │   │   │   ├── Title/
+         │   │   │   │   ├── index.tsx
+         │   │   │   │   └── style.module.scss
+         │   │   │   ├── TodoItem/
+         │   │   │   │   ├── index.tsx
+         │   │   │   │   └── style.module.scss
+         │   │   │   └── Paginate/
+         │   │   │       ├── index.tsx
+         │   │   │       └── style.module.scss
+         │   │   ├── index.tsx
+         │   │   └── style.module.scss
+         │   ├── Login/
+         │   │   ├── index.tsx
+         │   │   └── style.module.scss
+         │   ├── Register/
+         │   │   ├── index.tsx
+         │   │   └── style.module.scss
+         │   └── index.ts (entry point)
+         ├── App.tsx
+         ├── App.scss
+         ├── main.tsx
+         └── index.css
          ``
