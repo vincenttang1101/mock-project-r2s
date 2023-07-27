@@ -14,15 +14,22 @@ interface IFormFile {
 }
 
 export const FormField = ({ field, type, label, name, variant, children }: IFormFile) => {
-  return (
-    <div className={style['formField']}>
-      {field === 'Input' && <Form.Control type={type} placeholder={label} name={name} />}
-      {field === 'Button' && (
-        <Button type='submit' variant={variant}>
-          {children}
-        </Button>
-      )}
-      {field === 'Select' && <FormSelect name={name}>{children}</FormSelect>}
-    </div>
-  )
+  const handleSwitchField = (field: string) => {
+    switch (field) {
+      case 'Input':
+        return <Form.Control type={type} placeholder={label} name={name} />
+      case 'Button':
+        return (
+          <Button type='submit' variant={variant}>
+            {children}
+          </Button>
+        )
+      case 'Select':
+        return <FormSelect name={name}>{children}</FormSelect>
+      default:
+        return null
+    }
+  }
+
+  return <div className={style['formField']}>{handleSwitchField(field)}</div>
 }
