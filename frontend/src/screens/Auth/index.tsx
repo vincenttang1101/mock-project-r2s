@@ -1,7 +1,7 @@
-import { FormField } from '@components/FormField'
-import style from './style.module.scss'
-import { Title } from '@components'
 import Container from 'react-bootstrap/Container'
+import { FormField } from '@components/FormField'
+import { Title } from '@components'
+import style from './style.module.scss'
 
 interface IType {
   type: string

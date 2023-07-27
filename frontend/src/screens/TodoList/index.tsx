@@ -1,6 +1,6 @@
-import { Title } from '@components/Title'
 import { Container } from 'react-bootstrap'
 import { FormField } from '@components/FormField'
+import { Title } from '@components/Title'
 import style from './style.module.scss'
 
 export const TodoList = () => {

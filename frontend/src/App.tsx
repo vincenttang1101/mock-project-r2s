@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom'
-import './App.css'
-import { Footer, Header } from '@components'
 import { Container } from 'react-bootstrap'
+import { Footer, Header } from '@components'
+import './App.css'
 
 function App() {
   return (

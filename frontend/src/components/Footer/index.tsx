@@ -1,6 +1,6 @@
 import { Container } from 'react-bootstrap'
-import style from './style.module.scss'
 import { BsFacebook, BsGithub, BsYoutube } from 'react-icons/bs'
+import style from './style.module.scss'
 
 export const Footer = () => {
   return (

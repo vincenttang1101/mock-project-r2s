@@ -1,8 +1,8 @@
-import style from './style.module.scss'
+import { ReactNode } from 'react'
+import { FormSelect } from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import { FormSelect } from 'react-bootstrap'
-import { ReactNode } from 'react'
+import style from './style.module.scss'
 
 interface IFormFile {
   field: 'Input' | 'Select' | 'Button'
