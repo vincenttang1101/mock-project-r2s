@@ -15,7 +15,7 @@
          
       - Section 3: Quản lý công việc (Todo App)
          +  Ứng dụng Todo App phải cho phép người dùng thêm, cập nhật, xóa và đánh dấu các công việc cần làm trong danh sách công việc và phân trang cho danh sách công việc.
-         + Danh sách công việc phải hiển thị tên công việc, mô tả, thời gian tạo và trạng thái (đã hoàn thành hoặc chưa hoàn thành).
+         + Danh sách công việc phải hiển thị tên công việc, mức độ ưu tiên , thời gian deadline và trạng thái (đã hoàn thành hoặc chưa hoàn thành).
          + Ứng dụng còn cho phép người dùng tìm kiếm/lọc danh sách công việc theo trạng thái đã hoàn thành hoặc chưa hoàn thành.
 
 ## 2/ Folder Structure
