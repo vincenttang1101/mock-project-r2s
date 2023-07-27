@@ -1,0 +1,74 @@
+.todos {
+  max-width: 50% !important;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__button {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  &__list {
+    border: 1px solid #d3d3d3;
+    padding: 1.5rem;
+    border-radius: 2%;
+    list-style-type: none;
+  }
+}
+
+.todo {
+  padding-bottom: 0.5rem;
+  &__task {
+    display: flex;
+    justify-content: space-between;
+    padding: 1px 0;
+    > .task__left {
+      display: flex;
+      align-items: center;
+      > .task__check {
+        width: 20px;
+        height: 20px;
+      }
+      > .task__title {
+        font-size: 1.1rem;
+        font-weight: bolder;
+        &--completed {
+          text-decoration: line-through;
+          font-style: italic;
+        }
+      }
+    }
+    > .task__right {
+      display: flex;
+      gap: 0.5rem;
+    }
+  }
+  &__description {
+    display: flex;
+    justify-content: space-between;
+
+    > .description__priority {
+      font-weight: bold;
+      &--isLow {
+        color: gray;
+      }
+      &--isMedium {
+        color: blue;
+      }
+      &--isHigh {
+        color: red;
+      }
+    }
+
+    > .description__button {
+      display: flex;
+      gap: 5px;
+
+      > button {
+        border-radius: 12%;
+      }
+    }
+  }
+}
