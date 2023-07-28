@@ -2,6 +2,8 @@ import { Container } from 'react-bootstrap'
 import { FormField } from '@components/FormField'
 import { Title } from '@components/Title'
 import style from './style.module.scss'
+import { BsFillPencilFill, BsTrashFill } from 'react-icons/bs'
+import { MdAdd } from 'react-icons/md'
 
 export const TodoList = () => {
   return (
@@ -15,47 +17,61 @@ export const TodoList = () => {
         <option value='heigh'>Heigh</option>
       </FormField>
       <div className={style['todos__button']}>
-        <FormField field='Button' type='submit' label='Add'>
-          Add
+        <FormField field='Button' type='submit' label='Search' variant='outline-primary'>
+          <MdAdd />
         </FormField>
-        <FormField field='Select' name='filterTodo'>
+        <FormField field='Select' name='filter'>
           <option value='all'>Status</option>
           <option value='uncompleted'>Uncompleted</option>
           <option value='completed'>Completed</option>
         </FormField>
-        <FormField field='Button' type='submit' label='Search'>
-          Search
+        <FormField field='Button' type='submit' label='Search' variant='outline-primary'>
+          🔎
         </FormField>
       </div>
       <ul className={style['todos__list']}>
         <li className={style['todo']}>
           <div className={style['todo__task']}>
             <div className={style['task__left']}>
-              <input className={style['task__check']} type='checkbox' />
+              <FormField
+                field='Check'
+                type='checkbox'
+                name='check'
+                styleCustom={{ fontSize: '1.1rem', border: '1px solid gray' }}
+              />
               <span className={style['task__title']}>ReactJS</span>
+              <span className={`${style['task__priority']} ${style['task__priority--isLow']}`}>Low</span>
             </div>
             <div className={style['task__right']}>
-              <button>🖊️</button>
-              <button>🗑️</button>
+              <span className={style['task__button']}>
+                <BsFillPencilFill />
+              </span>
+              <span className={style['task__button']}>
+                <BsTrashFill />
+              </span>
             </div>
-          </div>
-          <div className={style['todo__description']}>
-            <span className={`${style['description__priority']} ${style['description__priority--isLow']}`}>Low</span>
           </div>
         </li>
         <li className={style['todo']}>
           <div className={style['todo__task']}>
             <div className={style['task__left']}>
-              <input className={style['task__check']} type='checkbox' />
-              <span className={style['task__title']}>NodeJS</span>
+              <FormField
+                field='Check'
+                type='checkbox'
+                name='check'
+                styleCustom={{ fontSize: '1.1rem', border: '1px solid gray' }}
+              />
+              <span className={style['task__title']}>ReactJS</span>
+              <span className={`${style['task__priority']} ${style['task__priority--isLow']}`}>Low</span>
             </div>
             <div className={style['task__right']}>
-              <button>🖊️</button>
-              <button>🗑️</button>
+              <span className={style['task__button']}>
+                <BsFillPencilFill />
+              </span>
+              <span className={style['task__button']}>
+                <BsTrashFill />
+              </span>
             </div>
-          </div>
-          <div className={style['todo__description']}>
-            <span className={`${style['description__priority']} ${style['description__priority--isLow']}`}>Low</span>
           </div>
         </li>
       </ul>

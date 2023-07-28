@@ -4,32 +4,49 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import style from './style.module.scss'
 
+type Field = 'Input' | 'Select' | 'Button' | 'Check'
+type Type = 'text' | 'email' | 'password' | 'checkbox' | 'submit' | 'reset'
+
 interface IFormFile {
-  field: 'Input' | 'Select' | 'Button'
-  type?: 'text' | 'email' | 'password' | 'submit' | 'reset' | string
+  field: Field
+  type?: Type
   label?: string
   name?: string
   variant?: 'primary' | 'outline-secondary' | string
   children?: ReactNode
+  [key: string]: unknown
+  styleCustom?: object
 }
 
-export const FormField = ({ field, type, label, name, variant, children }: IFormFile) => {
+export const FormField = ({ field, type, label, name, variant, children, styleCustom, ...rest }: IFormFile) => {
+  console.log(styleCustom)
+
   const handleSwitchField = (field: string) => {
     switch (field) {
       case 'Input':
-        return <Form.Control type={type} placeholder={label} name={name} />
+        return <Form.Control type={type} placeholder={label} name={name} {...rest} />
       case 'Button':
         return (
-          <Button type='submit' variant={variant}>
+          <Button type='submit' variant={variant} {...rest}>
             {children}
           </Button>
         )
       case 'Select':
-        return <FormSelect name={name}>{children}</FormSelect>
+        return (
+          <FormSelect name={name} {...rest}>
+            {children}
+          </FormSelect>
+        )
+      case 'Check':
+        return (
+          <Form.Check name={name} {...rest}>
+            <Form.Check.Input style={styleCustom} />
+          </Form.Check>
+        )
       default:
         return null
     }
   }
 
-  return <div className={style['formField']}>{handleSwitchField(field)}</div>
+  return <>{handleSwitchField(field)}</>
 }
