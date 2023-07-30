@@ -26,6 +26,8 @@
       "@components":[ "./components"],
       "@screens/*":[ "./screens/*"],
       "@screens":[ "./screens"],
+      "@api/*":[ "./api/*"],
+      "@constants":[ "./constants"],
     }
   },
   "include": ["src"],

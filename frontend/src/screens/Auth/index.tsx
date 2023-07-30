@@ -8,7 +8,6 @@ import { Title } from '@components'
 import userApi from '@api/userApi'
 import { isAuthenticated } from '@constants'
 import style from './style.module.scss'
-import App from './../../App'
 
 interface IType {
   type: string
