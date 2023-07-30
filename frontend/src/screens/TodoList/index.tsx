@@ -1,14 +1,25 @@
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
+import { MdAdd } from 'react-icons/md'
+import { BsFillPencilFill, BsTrashFill } from 'react-icons/bs'
 import { FormField } from '@components/FormField'
 import { Title } from '@components/Title'
+import { isAuthenticated } from '@constants'
 import style from './style.module.scss'
-import { BsFillPencilFill, BsTrashFill } from 'react-icons/bs'
-import { MdAdd } from 'react-icons/md'
 
 export const TodoList = () => {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate('/')
+    } else navigate('/login')
+  }, [navigate])
+
   return (
     <Container className={style['todos']}>
-      <Title name='Todo List' />
+      <Title name='Todo List' style={{ textAlign: 'center' }} />
       <FormField field='Input' type='text' label='Title' name='title' />
       <FormField field='Select' name='piority'>
         <option value='all'>Piority</option>
@@ -17,16 +28,13 @@ export const TodoList = () => {
         <option value='heigh'>Heigh</option>
       </FormField>
       <div className={style['todos__button']}>
-        <FormField field='Button' type='submit' label='Search' variant='outline-primary'>
-          <MdAdd />
-        </FormField>
         <FormField field='Select' name='filter'>
           <option value='all'>Status</option>
           <option value='uncompleted'>Uncompleted</option>
           <option value='completed'>Completed</option>
         </FormField>
         <FormField field='Button' type='submit' label='Search' variant='outline-primary'>
-          🔎
+          <MdAdd />
         </FormField>
       </div>
       <ul className={style['todos__list']}>
