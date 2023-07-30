@@ -1,34 +1,173 @@
+import { useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import Container from 'react-bootstrap/Container'
+import { useFormik } from 'formik'
+import { object, string, ref } from 'yup'
 import { FormField } from '@components/FormField'
 import { Title } from '@components'
+import userApi from '@api/userApi'
+import { isAuthenticated } from '@constants'
 import style from './style.module.scss'
+import App from './../../App'
 
 interface IType {
   type: string
 }
 
 export const Auth = ({ type }: IType) => {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate('/')
+    }
+  }, [navigate])
+
+  const formikLogin = useFormik({
+    initialValues: {
+      email: '',
+      password: ''
+    },
+    validationSchema: object({
+      email: string().required('Email is a required field').email('Invalid email address'),
+      password: string().required('Password is a required field')
+    }),
+    onSubmit: (values) => {
+      userApi
+        .loginUser(values)
+        .then((response) => {
+          localStorage.setItem('access-token', response.data.accessToken!)
+          navigate('/')
+        })
+        .catch((error) => alert(error.response.data.message))
+    }
+  })
+
+  const formikRegister = useFormik({
+    initialValues: {
+      name: '',
+      email: '',
+      password: '',
+      repeatPassword: ''
+    },
+    validationSchema: object({
+      name: string().required('Name is a required field'),
+      email: string().required('Enail is a required field').email('Invalid email address'),
+      password: string()
+        .required('Password is a required field')
+        .min(10, 'Too short !')
+        .max(30, 'Too Long !')
+        .matches(/^(?=.*[a-z])/, 'Must Contain One Lowercase Character')
+        .matches(/^(?=.*[A-Z])/, 'Must Contain One Uppercase Character')
+        .matches(/^(?=.*[0-9])/, 'Must Contain One Number Character')
+        .matches(/^(?=.*[!@#\$%\^&\*])/, 'Must Contain  One Special Case Character'),
+      repeatPassword: string()
+        .required('Repeat Password is a required field')
+        .oneOf([ref('password')], 'Your passwords do not match.')
+    }),
+    onSubmit: (values) => {
+      userApi
+        .registerUser(values)
+        .then(() => navigate('/login'))
+        .catch((error) => alert(error.response.data.errors.email))
+    }
+  })
+
   return (
     <Container className={style['auth']}>
       {type === 'Login' ? (
         <>
-          <Title name='Login' />
-          <FormField field='Input' type='email' label='Email' name='email' />
-          <FormField field='Input' type='password' label='password' name='Password' />
-          <FormField field='Button' type='submit' name='Login'>
-            Login
-          </FormField>
+          <Title name='Login' style={{ textAlign: 'center' }} />
+          <form onSubmit={formikLogin.handleSubmit}>
+            <FormField
+              field='Input'
+              type='email'
+              label='Email'
+              name='email'
+              onChange={formikLogin.handleChange}
+              value={formikLogin.values.email}
+            />
+            {formikLogin.touched.email && formikLogin.errors.email ? (
+              <span style={{ color: 'red' }}>{formikLogin.errors.email}</span>
+            ) : null}
+            <FormField
+              field='Input'
+              type='password'
+              label='Password'
+              name='password'
+              autoComplete='true'
+              onChange={formikLogin.handleChange}
+              value={formikLogin.values.password}
+            />
+            {formikLogin.touched.password && formikLogin.errors.password ? (
+              <span style={{ color: 'red' }}>{formikLogin.errors.password}</span>
+            ) : null}
+            <span>
+              Don't have an account?
+              <Link to='/register' style={{ textDecoration: 'none' }}>
+                {' '}
+                Register
+              </Link>
+            </span>
+            <FormField field='Button' type='submit' name='Login'>
+              Login
+            </FormField>
+          </form>
         </>
       ) : (
         <>
-          <Title name='Register' />
-          <FormField field='Input' type='text' label='Name' name='name' />
-          <FormField field='Input' type='email' label='Email' name='email' />
-          <FormField field='Input' type='password' label='password' name='Password' />
-          <FormField field='Input' type='password' label='Repeat Password' name='RepeatPassword' />
-          <FormField field='Button' type='submit' name='Register'>
-            Register
-          </FormField>
+          <Title name='Register' style={{ textAlign: 'center' }} />
+          <form onSubmit={formikRegister.handleSubmit}>
+            <FormField
+              field='Input'
+              type='text'
+              label='Name'
+              name='name'
+              onChange={formikRegister.handleChange}
+              value={formikRegister.values.name}
+            />
+            {formikRegister.touched.name && formikRegister.errors.name ? (
+              <span style={{ color: 'red' }}>{formikRegister.errors.name}</span>
+            ) : null}
+            <FormField
+              field='Input'
+              type='email'
+              label='Email'
+              name='email'
+              onChange={formikRegister.handleChange}
+              value={formikRegister.values.email}
+            />
+            {formikRegister.touched.email && formikRegister.errors.email ? (
+              <span style={{ color: 'red' }}>{formikRegister.errors.email}</span>
+            ) : null}
+            <FormField
+              field='Input'
+              type='password'
+              label='Password'
+              name='password'
+              autoComplete='true'
+              onChange={formikRegister.handleChange}
+              value={formikRegister.values.password}
+            />
+            {formikRegister.touched.password && formikRegister.errors.password ? (
+              <span style={{ color: 'red' }}>{formikRegister.errors.password}</span>
+            ) : null}
+            <FormField
+              field='Input'
+              type='password'
+              label='Repeat Password'
+              name='repeatPassword'
+              autoComplete='true'
+              onChange={formikRegister.handleChange}
+              value={formikRegister.values.repeatPassword}
+            />
+            {formikRegister.touched.repeatPassword && formikRegister.errors.repeatPassword ? (
+              <span style={{ color: 'red' }}>{formikRegister.errors.repeatPassword}</span>
+            ) : null}
+            <FormField field='Button' type='submit' name='Register'>
+              Register
+            </FormField>
+          </form>
         </>
       )}
     </Container>

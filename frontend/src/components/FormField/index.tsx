@@ -19,8 +19,6 @@ interface IFormFile {
 }
 
 export const FormField = ({ field, type, label, name, variant, children, styleCustom, ...rest }: IFormFile) => {
-  console.log(styleCustom)
-
   const handleSwitchField = (field: string) => {
     switch (field) {
       case 'Input':

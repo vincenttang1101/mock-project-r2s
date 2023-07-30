@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, redirect } from 'react-router-dom'
 import './index.css'
 import App from 'App'
 import { Auth, TodoList } from '@screens'
@@ -13,9 +13,9 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <NotFound />,
     children: [
+      { path: '/', element: <TodoList /> },
       { path: '/register', element: <Auth type='Register' /> },
-      { path: '/', element: <Auth type='Login' /> },
-      { path: '/todo-list', element: <TodoList /> }
+      { path: '/login', element: <Auth type='Login' /> }
     ]
   }
 ])

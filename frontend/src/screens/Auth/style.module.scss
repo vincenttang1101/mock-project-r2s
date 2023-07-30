@@ -2,8 +2,11 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
+  max-width: 30% !important;
 
-h1 {
-  text-align: center;
+  > form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 }
