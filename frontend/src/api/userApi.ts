@@ -1,6 +1,5 @@
-import { IUser } from 'type/userType'
+import { IUser, IDataResponse } from '@typing'
 import axiosClient from './axiosClient'
-import { IDataResponse } from 'type/common'
 
 const userApi = {
   getUsers() {

@@ -1,0 +1,22 @@
+.addTodo {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+
+  &__title {
+    flex: 0.6;
+  }
+
+  &__priority {
+    flex: 0.4;
+  }
+  &__button {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    > select {
+      max-width: 20%;
+    }
+  }
+}

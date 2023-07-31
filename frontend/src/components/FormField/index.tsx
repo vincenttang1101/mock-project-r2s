@@ -2,7 +2,6 @@ import { ReactNode } from 'react'
 import { FormSelect } from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import style from './style.module.scss'
 
 type Field = 'Input' | 'Select' | 'Button' | 'Check'
 type Type = 'text' | 'email' | 'password' | 'checkbox' | 'submit' | 'reset'
@@ -15,10 +14,10 @@ interface IFormFile {
   variant?: 'primary' | 'outline-secondary' | string
   children?: ReactNode
   [key: string]: unknown
-  styleCustom?: object
+  style?: object
 }
 
-export const FormField = ({ field, type, label, name, variant, children, styleCustom, ...rest }: IFormFile) => {
+export const FormField = ({ field, type, label, name, variant, children, style, ...rest }: IFormFile) => {
   const handleSwitchField = (field: string) => {
     switch (field) {
       case 'Input':
@@ -38,7 +37,7 @@ export const FormField = ({ field, type, label, name, variant, children, styleCu
       case 'Check':
         return (
           <Form.Check name={name} {...rest}>
-            <Form.Check.Input style={styleCustom} />
+            <Form.Check.Input style={style} />
           </Form.Check>
         )
       default:

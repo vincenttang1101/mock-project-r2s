@@ -1,8 +1,8 @@
 interface ITitle {
-  name: string
+  label: string
   [key: string]: unknown
 }
 
-export const Title = ({ name, ...rest }: ITitle) => {
-  return <h1 {...rest}>{name}</h1>
+export const Title = ({ label, ...rest }: ITitle) => {
+  return <h1 {...rest}>{label}</h1>
 }
