@@ -3,10 +3,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import Container from 'react-bootstrap/Container'
 import { useFormik } from 'formik'
 import { object, string, ref } from 'yup'
-import { FormField } from '@components/FormField'
-import { Title } from '@components'
 import userApi from '@api/userApi'
 import { isAuthenticated } from '@constants'
+import { Title } from '@components'
+import { FormField } from '@components/FormField'
 import style from './style.module.scss'
 
 interface IType {
@@ -55,7 +55,7 @@ export const Auth = ({ type }: IType) => {
       password: string()
         .required('Password is a required field')
         .min(10, 'Too short !')
-        .max(30, 'Too Long !')
+        .max(30, 'Too long !')
         .matches(/^(?=.*[a-z])/, 'Must Contain One Lowercase Character')
         .matches(/^(?=.*[A-Z])/, 'Must Contain One Uppercase Character')
         .matches(/^(?=.*[0-9])/, 'Must Contain One Number Character')
@@ -76,7 +76,7 @@ export const Auth = ({ type }: IType) => {
     <Container className={style['auth']}>
       {type === 'Login' ? (
         <>
-          <Title name='Login' style={{ textAlign: 'center' }} />
+          <Title label='Login' style={{ textAlign: 'center' }} />
           <form onSubmit={formikLogin.handleSubmit}>
             <FormField
               field='Input'
@@ -115,7 +115,7 @@ export const Auth = ({ type }: IType) => {
         </>
       ) : (
         <>
-          <Title name='Register' style={{ textAlign: 'center' }} />
+          <Title label='Register' style={{ textAlign: 'center' }} />
           <form onSubmit={formikRegister.handleSubmit}>
             <FormField
               field='Input'
