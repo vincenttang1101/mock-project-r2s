@@ -29,3 +29,12 @@ export const addTodo: RequestHandler = async (req: Request, res: Response) => {
     return res.status(500).json({ message: err.message })
   }
 }
+
+export const getTodos: RequestHandler = async (req: Request, res: Response) => {
+  try {
+    const todos = await Todo.find()
+    res.status(200).json({ message: 'Todo List', data: todos })
+  } catch (err: any) {
+    return res.status(500).json({ message: err.message })
+  }
+}

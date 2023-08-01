@@ -1,8 +1,9 @@
+import { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 
 const { JWT_KEY } = process.env
 
-export const checkAuthToken = (req: any, res: any, next: any) => {
+export const checkAuthToken = (req: Request, res: Response, next: any) => {
   const authorizationClient = req.headers['authorization']
 
   const token = authorizationClient && authorizationClient.split(' ')[1]
@@ -10,10 +11,16 @@ export const checkAuthToken = (req: any, res: any, next: any) => {
   if (!token) return res.sendStatus(401)
 
   try {
-    jwt.verify(token, JWT_KEY || 'VincentTang')
+    jwt.verify(token, JWT_KEY || 'VincentTang');
 
     next()
   } catch (e) {
-    return res.status(403).json({ error: 'Unauthorized' })
+    if (e instanceof jwt.TokenExpiredError) {
+      return res.status(403).json({ message: 'Token expired' });
+    }
+
+    return res.status(403).json({ message: 'Unauthorized' })
   }
 }
+
+
