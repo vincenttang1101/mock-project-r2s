@@ -1,8 +1,10 @@
 import { Router } from 'express'
-import { addTodo } from '../controllers'
+import { addTodo, getTodos } from '../controllers'
+import { checkAuthToken } from '../middlewares'
 
 const router = Router()
 
-router.post('/', addTodo)
+router.get('/', checkAuthToken, getTodos)
+router.post('/', checkAuthToken, addTodo)
 
 export const todoRoutes = router

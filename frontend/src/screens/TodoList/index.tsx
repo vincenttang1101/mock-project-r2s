@@ -1,22 +1,27 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
-import { useAppSelector } from '@app/hook'
+import { useAppDispatch, useAppSelector } from '@app/hook'
 import { Title } from '@components/Title'
 import { isAuthenticated } from '@constants'
 import { AddTodo, TodoItem } from './components'
 import { FilterTodo } from './components/FilterTodo'
 import style from './style.module.scss'
 import { Loader } from '@components/Loader'
+import { getTodos } from './todoSlice'
+
 export const TodoList = () => {
   const todos = useAppSelector((state) => state.todo.todos)
   const status = useAppSelector((state) => state.todo.status)
 
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   useEffect(() => {
     if (isAuthenticated()) {
       navigate('/')
+      dispatch(getTodos())
+      console.log('asd')
     } else navigate('/login')
   }, [navigate])
 
