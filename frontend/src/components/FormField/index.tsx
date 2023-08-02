@@ -21,16 +21,16 @@ export const FormField = ({ field, type, label, name, variant, children, style, 
   const handleSwitchField = (field: string) => {
     switch (field) {
       case 'Input':
-        return <Form.Control type={type} placeholder={label} name={name} {...rest} />
+        return <Form.Control type={type} placeholder={label} name={name} style={style} {...rest} />
       case 'Button':
         return (
-          <Button type='submit' variant={variant} {...rest}>
+          <Button type='submit' variant={variant} style={style} {...rest}>
             {children}
           </Button>
         )
       case 'Select':
         return (
-          <FormSelect name={name} {...rest}>
+          <FormSelect name={name} style={style} {...rest}>
             {children}
           </FormSelect>
         )

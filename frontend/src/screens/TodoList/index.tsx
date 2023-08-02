@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import { useAppDispatch, useAppSelector } from '@app/hook'
 import { Title } from '@components/Title'
-import { isAuthenticated } from '@constants'
+import { isAuthenticated } from 'utils'
 import { AddTodo, TodoItem } from './components'
 import { FilterTodo } from './components/FilterTodo'
 import style from './style.module.scss'
@@ -21,7 +21,6 @@ export const TodoList = () => {
     if (isAuthenticated()) {
       navigate('/')
       dispatch(getTodos())
-      console.log('asd')
     } else navigate('/login')
   }, [navigate])
 

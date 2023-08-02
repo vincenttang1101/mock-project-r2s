@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
-import { isAuthenticated } from '@constants'
+import { isAuthenticated } from 'utils'
 import reactLogo from '@assets/react.svg'
 import style from './style.module.scss'
 

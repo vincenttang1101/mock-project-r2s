@@ -1,3 +1,5 @@
+@import '../../mixins';
+
 .todos {
   max-width: 50% !important;
   display: flex;
@@ -5,7 +7,7 @@
   gap: 1rem;
 
   &__bottom {
-    margin-top: 2rem;
+    margin-top: 0.8rem;
     display: flex;
     flex-direction: column;
 
@@ -46,5 +48,11 @@
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
+  }
+}
+
+@include mediumDeviceSize {
+  .todos {
+    max-width: 100% !important;
   }
 }
