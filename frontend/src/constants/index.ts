@@ -1,3 +1,2 @@
-export const isAuthenticated = () => {
-  return localStorage.getItem('access-token') !== null
-}
+export const apiEndpoint = 'http://localhost:3333/api'
+export const accessToken = 'access-token'

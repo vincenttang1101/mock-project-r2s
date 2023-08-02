@@ -1,3 +1,5 @@
+@import '../../../../mixins';
+
 .todo {
   background-color: white;
   opacity: 0.9;
@@ -63,4 +65,15 @@
 
 li.todo:last-child {
   margin-bottom: 0;
+}
+
+@include mediumDeviceSize {
+  .todo {
+    &__task {
+      flex-direction: column;
+      > .task__left > .task__title {
+        flex: 1;
+      }
+    }
+  }
 }

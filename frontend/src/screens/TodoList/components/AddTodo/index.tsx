@@ -52,11 +52,9 @@ export const AddTodo = () => {
           <span style={{ color: 'red' }}>{formikAdd.errors.priority}</span>
         ) : null}
       </div>
-      <div className={style['addTodo__button']}>
-        <FormField field='Button' type='submit' label='Search' variant='outline-primary'>
-          <MdAdd />
-        </FormField>
-      </div>
+      <FormField field='Button' type='submit' variant='outline-primary'>
+        <MdAdd />
+      </FormField>
     </form>
   )
 }

@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container'
 import { useFormik } from 'formik'
 import { object, string, ref } from 'yup'
 import userApi from '@api/userApi'
-import { isAuthenticated } from '@constants'
+import { isAuthenticated } from 'utils'
 import { Title } from '@components'
 import { FormField } from '@components/FormField'
 import style from './style.module.scss'
@@ -31,11 +31,12 @@ export const Auth = ({ type }: IType) => {
       email: string().required('Email is a required field').email('Invalid email address'),
       password: string().required('Password is a required field')
     }),
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       userApi
         .loginUser(values)
         .then((response) => {
           localStorage.setItem('access-token', response.data.accessToken!)
+          resetForm()
           navigate('/')
         })
         .catch((error) => alert(error.response.data.message))
@@ -64,10 +65,13 @@ export const Auth = ({ type }: IType) => {
         .required('Repeat Password is a required field')
         .oneOf([ref('password')], 'Your passwords do not match.')
     }),
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       userApi
         .registerUser(values)
-        .then(() => navigate('/login'))
+        .then(() => {
+          resetForm()
+          navigate('/login')
+        })
         .catch((error) => alert(error.response.data.errors.email))
     }
   })

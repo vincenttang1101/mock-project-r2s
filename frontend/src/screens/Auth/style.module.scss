@@ -1,3 +1,5 @@
+@import '../../mixins';
+
 .auth {
   display: flex;
   flex-direction: column;
@@ -8,5 +10,17 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+  }
+}
+
+@include mediumDeviceSize {
+  .auth {
+    max-width: 70% !important;
+  }
+}
+
+@include extraSmallDeviceSize {
+  .auth {
+    max-width: 100% !important;
   }
 }
