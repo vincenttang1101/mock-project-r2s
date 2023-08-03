@@ -1,9 +1,9 @@
-import { Request, Response } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 
 const { JWT_KEY } = process.env
 
-export const checkAuthToken = (req: Request, res: Response, next: any) => {
+export const checkAuthToken = (req: Request, res: Response, next: NextFunction) => {
   const authorizationClient = req.headers['authorization']
 
   const token = authorizationClient && authorizationClient.split(' ')[1]
