@@ -1,16 +1,18 @@
-import { ITodo, IDataResponse } from '@typing'
 import axiosClient from '@api/axiosClient'
+import { todoApiUrl } from '@constants'
+import { ITodo, IDataResponse } from '@typing'
 
 const todoApi = {
   getTodos(): Promise<IDataResponse<ITodo[]>> {
-    const url = '/todos'
-    return axiosClient.get(url)
+    return axiosClient.get(todoApiUrl)
 
   },
   addTodo(todo: ITodo): Promise<IDataResponse<ITodo>> {
-    const url = '/todos'
-    return axiosClient.post(url, todo)
+    return axiosClient.post(todoApiUrl, todo)
   },
+  updateTodo(todo: ITodo): Promise<IDataResponse<ITodo>> {
+    return axiosClient.patch(todoApiUrl, todo)
+  }
 }
 
 export default todoApi

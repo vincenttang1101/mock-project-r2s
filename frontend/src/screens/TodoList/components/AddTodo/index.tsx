@@ -21,8 +21,9 @@ export const AddTodo = () => {
         .oneOf(['Low', 'Medium', 'High'], 'Priority must be either Low, Medium, or High')
         .required('Priority is a required field')
     }),
-    onSubmit: (todo) => {
-      dispatch(addTodo(todo))
+    onSubmit: async (todo, { resetForm }) => {
+      await dispatch(addTodo(todo))
+      resetForm()
     }
   })
 
