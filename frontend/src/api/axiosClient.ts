@@ -1,10 +1,10 @@
-import { apiEndpoint } from '@constants';
+import { baseUrl } from '@constants';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { useNavigate } from 'react-router-dom';
 
 
 const axiosClient = axios.create({
-  baseURL: apiEndpoint,
+  baseURL: baseUrl,
   headers: {
     'Content-Type': 'application/json'
   }
