@@ -30,6 +30,16 @@ export const addTodo: RequestHandler = async (req: Request, res: Response) => {
   }
 }
 
+export const updateTodo: RequestHandler = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    const todo = await Todo.findByIdAndUpdate(id, req.body, { new: true })
+    return res.status(200).json({ message: 'Todo updated successfully', data: todo })
+  } catch (err: any) {
+    return res.status(500).json({ message: err.message })
+  }
+}
+
 export const getTodos: RequestHandler = async (req: Request, res: Response) => {
   try {
     const todos = await Todo.find()
@@ -38,3 +48,5 @@ export const getTodos: RequestHandler = async (req: Request, res: Response) => {
     return res.status(500).json({ message: err.message })
   }
 }
+
+export const 

@@ -6,12 +6,10 @@
   margin-bottom: 23px;
   padding: 10px 10px;
 
-  li:last-child {
-    margin-bottom: 0;
-  }
   &__task {
     display: flex;
     justify-content: space-between;
+    // align-items: center;
 
     > .task__left {
       display: flex;
@@ -45,6 +43,11 @@
           color: red;
         }
       }
+
+      > .task__formField {
+        display: flex;
+        width: 100%;
+      }
     }
     > .task__right {
       display: flex;
@@ -60,20 +63,48 @@
         background-color: #dedfe1;
       }
     }
+
+    &--isEditing {
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .task__formField {
+        gap: 0.5rem;
+
+        > input {
+          width: 150%;
+        }
+      }
+      > .task__right {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
   }
 }
 
-li.todo:last-child {
+.todo:last-of-type {
   margin-bottom: 0;
 }
 
-@include mediumDeviceSize {
-  .todo {
-    &__task {
+@include smallDeviceSize {
+  .todo__task {
+    flex-direction: column;
+    > .task__left > .task__title {
+      flex: 1;
+    }
+    > .task__right {
       flex-direction: column;
-      > .task__left > .task__title {
-        flex: 1;
-      }
+      margin-top: 20px;
+      text-align: center;
+    }
+  }
+
+  .task__formField {
+    flex-direction: column;
+    > input,
+    select {
+      width: 100% !important;
     }
   }
 }
