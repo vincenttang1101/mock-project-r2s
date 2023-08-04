@@ -11,7 +11,10 @@ const todoApi = {
     return axiosClient.post(todoApiUrl, todo)
   },
   updateTodo(todo: ITodo): Promise<IDataResponse<ITodo>> {
-    return axiosClient.patch(todoApiUrl, todo)
+    return axiosClient.patch(`${todoApiUrl}/${todo._id}`, todo)
+  },
+  deleteTodo(_id: string): Promise<IDataResponse<any>> {
+    return axiosClient.delete(`${todoApiUrl}/${_id}`)
   }
 }
 

@@ -16,6 +16,9 @@
       gap: 0.5rem;
       align-items: center;
 
+      > .task__check {
+        cursor: pointer;
+      }
       > .task__title {
         font-size: 1.1rem;
         font-weight: bolder;
@@ -68,8 +71,14 @@
       flex-direction: column;
       gap: 0.5rem;
 
+      .task__left > .task__check {
+        background-color: red;
+        display: none;
+      }
+
       .task__formField {
         gap: 0.5rem;
+        flex-wrap: wrap;
 
         > input {
           width: 150%;

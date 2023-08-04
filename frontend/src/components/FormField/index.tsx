@@ -36,8 +36,8 @@ export const FormField = ({ field, type, label, name, variant, children, style, 
         )
       case 'Check':
         return (
-          <Form.Check name={name} {...rest}>
-            <Form.Check.Input style={style} />
+          <Form.Check>
+            <Form.Check.Input name={name} style={style} {...rest} />
           </Form.Check>
         )
       default:
