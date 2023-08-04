@@ -7,7 +7,7 @@ import { useAppDispatch } from '@app/hook'
 import { FormField } from '@components/FormField'
 import { ITodo } from '@typing'
 import style from './style.module.scss'
-import { deleteTodo, updateTodo } from '@screens/TodoList/todoSlice'
+import { updateTodo } from '@screens/TodoList/todoSlice'
 
 interface ITodoItem {
   todo: ITodo
@@ -75,15 +75,15 @@ export const TodoItem = ({ todo }: ITodoItem) => {
     }
   }
 
-  const handleToggleRemoveCancel = () => {
-    if (isEditing) {
-      setIsEditing(false)
-    } else {
-      if (formikUpdate.values._id) {
-        dispatch(deleteTodo(formikUpdate.values._id))
-      }
-    }
-  }
+  // const handleToggleRemoveCancel = () => {
+  //   if (isEditing) {
+  //     setIsEditing(false)
+  //   } else {
+  //     if (formikUpdate.values._id) {
+  //       dispatch(deleteTodo(formikUpdate.values._id))
+  //     }
+  //   }
+  // }
 
   return (
     <li className={style['todo']}>
@@ -145,9 +145,7 @@ export const TodoItem = ({ todo }: ITodoItem) => {
           <span className={style['task__button']} onClick={handleToggleEditSave}>
             {!isEditing ? <BsFillPencilFill /> : <MdAdd />}
           </span>
-          <span className={style['task__button']} onClick={handleToggleRemoveCancel}>
-            {!isEditing ? <BsTrashFill /> : <MdOutlineCancel />}
-          </span>
+          <span className={style['task__button']}>{!isEditing ? <BsTrashFill /> : <MdOutlineCancel />}</span>
         </div>
       </form>
     </li>
