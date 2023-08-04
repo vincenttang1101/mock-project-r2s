@@ -8,4 +8,5 @@ export interface ITodo {
 export interface ITodoState {
   todos: ITodo[]
   status: 'idle' | 'loading' | 'failed'
+  totalItems: number
 }

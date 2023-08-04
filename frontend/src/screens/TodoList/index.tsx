@@ -8,7 +8,7 @@ import { AddTodo, PaginateTodos, TodoItem } from './components'
 import { FilterTodo } from './components/FilterTodo'
 import style from './style.module.scss'
 import { Loader } from '@components/Loader'
-import { getTodos, paginateTodos } from './todoSlice'
+import { paginateTodos } from './todoSlice'
 
 export const TodoList = () => {
   const todos = useAppSelector((state) => state.todo.todos)
@@ -42,7 +42,7 @@ export const TodoList = () => {
           <div className={style['bottom__loader']}>{status === 'loading' && <Loader />}</div>
         </ul>
       </div>
-      <PaginateTodos items={[1, 2, 3]} />
+      <PaginateTodos />
     </Container>
   )
 }

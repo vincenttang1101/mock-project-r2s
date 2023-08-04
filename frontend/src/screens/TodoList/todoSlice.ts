@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import todoApi from '@api/todoApi'
 import { ITodo, ITodoState } from '@typing'
-import { paginateTodos } from './todoSlice'
 
 interface IPaginateParams {
   page: number
@@ -10,6 +9,7 @@ interface IPaginateParams {
 
 const initialState: ITodoState = {
   todos: [],
+  totalItems: 0,
   status: 'idle'
 }
 
@@ -17,6 +17,7 @@ export const getTodos = createAsyncThunk('todo/getTodos', async () => {
   const response = await todoApi.getTodos()
   return response.data
 })
+
 export const addTodo = createAsyncThunk('todo/addTodo', async (todo: ITodo) => {
   const response = await todoApi.addTodo(todo)
   return response.data
@@ -34,8 +35,7 @@ export const deleteTodo = createAsyncThunk('todo/deleteTodo', async (_id: string
 
 export const paginateTodos = createAsyncThunk('todo/paginateTodos', async (params: IPaginateParams) => {
   const response = await todoApi.paginateTodos(params.page, params.limit)
-  console.log(response)
-  return response.data
+  return response
 })
 
 export const todoSlice = createSlice({
@@ -82,7 +82,8 @@ export const todoSlice = createSlice({
     })
     builder.addCase(paginateTodos.fulfilled, (state, action) => {
       state.status = 'idle'
-      state.todos = action.payload
+      state.todos = action.payload.data
+      state.totalItems = action.payload.totalItems
     })
     builder.addCase(paginateTodos.rejected, (state) => {
       state.status = 'failed'
