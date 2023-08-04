@@ -14,6 +14,9 @@ const todoApi = {
   },
   deleteTodo(_id: string): Promise<IDataResponse<any>> {
     return axiosClient.delete(`${todoApiUrl}/${_id}`)
+  },
+  paginateTodos(page: number, limit: number): Promise<IDataResponse<ITodo[]>> {
+    return axiosClient.get(`${todoApiUrl}/paginate/?page=${page}&limit=${limit}`)
   }
 }
 

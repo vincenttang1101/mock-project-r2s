@@ -66,7 +66,7 @@ export const paginateTodos: RequestHandler = async (req: Request, res: Response)
   try {
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || 4
-    const skip = (page - 1) * limit
+    const skip = page - 1
 
     const todos = await Todo.find().skip(skip).limit(limit)
     const totalTodos = await Todo.countDocuments()
