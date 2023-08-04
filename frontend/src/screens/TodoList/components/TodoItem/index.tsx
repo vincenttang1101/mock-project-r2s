@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { BsFillPencilFill, BsTrashFill } from 'react-icons/bs'
-import { MdAdd } from 'react-icons/md'
+import { MdAdd, MdOutlineCancel } from 'react-icons/md'
 import { useFormik } from 'formik'
 import { object, string } from 'yup'
+import { useAppDispatch } from '@app/hook'
 import { FormField } from '@components/FormField'
 import { ITodo } from '@typing'
 import style from './style.module.scss'
+import { updateTodo } from '@screens/TodoList/todoSlice'
 
 interface ITodoItem {
   todo: ITodo
@@ -14,11 +16,14 @@ interface ITodoItem {
 export const TodoItem = ({ todo }: ITodoItem) => {
   const [isEditing, setIsEditing] = useState(false)
 
+  const dispatch = useAppDispatch()
+
   const formikUpdate = useFormik({
     initialValues: {
+      _id: todo._id,
       title: todo.title,
       priority: todo.priority,
-      isCompleted: false
+      isCompleted: todo.isCompleted
     },
     validationSchema: object({
       title: string().required('Title is a required field').min(3, 'Too short !').max(30, 'Too long !'),
@@ -26,17 +31,10 @@ export const TodoItem = ({ todo }: ITodoItem) => {
         .oneOf(['Low', 'Medium', 'High'], 'Priority must be either Low, Medium, or High')
         .required('Priority is a required field')
     }),
-    onSubmit: (values) => {
-      console.log(values)
+    onSubmit: (todo) => {
+      dispatch(updateTodo(todo))
     }
   })
-
-  const handleToggleEditSave = () => {
-    if (isEditing) {
-      formikUpdate.submitForm()
-    }
-    setIsEditing(!isEditing)
-  }
 
   const handleSwitchPriority = (priority: string) => {
     switch (priority) {
@@ -51,6 +49,42 @@ export const TodoItem = ({ todo }: ITodoItem) => {
     }
   }
 
+  const handleCheckedChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement
+
+    dispatch(
+      updateTodo({
+        _id: formikUpdate.values._id,
+        isCompleted: target.checked
+      })
+    )
+
+    formikUpdate.handleChange(e)
+  }
+
+  const handleToggleEditSave = () => {
+    if (isEditing) {
+      formikUpdate.validateForm().then((errors) => {
+        if (Object.keys(errors).length === 0) {
+          setIsEditing(false)
+        }
+        formikUpdate.submitForm()
+      })
+    } else {
+      setIsEditing(true)
+    }
+  }
+
+  // const handleToggleRemoveCancel = () => {
+  //   if (isEditing) {
+  //     setIsEditing(false)
+  //   } else {
+  //     if (formikUpdate.values._id) {
+  //       dispatch(deleteTodo(formikUpdate.values._id))
+  //     }
+  //   }
+  // }
+
   return (
     <li className={style['todo']}>
       <form
@@ -61,8 +95,11 @@ export const TodoItem = ({ todo }: ITodoItem) => {
           <FormField
             field='Check'
             type='checkbox'
-            name='check'
+            name='isCompleted'
+            className={style['task__check']}
             style={{ fontSize: '1.1rem', border: '1px solid gray' }}
+            checked={formikUpdate.values.isCompleted}
+            onChange={handleCheckedChange}
           />
           {!isEditing ? (
             <>
@@ -84,6 +121,9 @@ export const TodoItem = ({ todo }: ITodoItem) => {
                 onChange={formikUpdate.handleChange}
                 value={formikUpdate.values.title}
               />
+              {formikUpdate.touched.title && formikUpdate.errors.title ? (
+                <span style={{ color: 'red' }}>{formikUpdate.errors.title}</span>
+              ) : null}
               <FormField
                 field='Select'
                 name='priority'
@@ -95,6 +135,9 @@ export const TodoItem = ({ todo }: ITodoItem) => {
                 <option value='Medium'>Medium</option>
                 <option value='High'>High</option>
               </FormField>
+              {formikUpdate.touched.priority && formikUpdate.errors.priority ? (
+                <span style={{ color: 'red' }}>{formikUpdate.errors.priority}</span>
+              ) : null}
             </div>
           )}
         </div>
@@ -102,9 +145,7 @@ export const TodoItem = ({ todo }: ITodoItem) => {
           <span className={style['task__button']} onClick={handleToggleEditSave}>
             {!isEditing ? <BsFillPencilFill /> : <MdAdd />}
           </span>
-          <span className={style['task__button']}>
-            <BsTrashFill />
-          </span>
+          <span className={style['task__button']}>{!isEditing ? <BsTrashFill /> : <MdOutlineCancel />}</span>
         </div>
       </form>
     </li>

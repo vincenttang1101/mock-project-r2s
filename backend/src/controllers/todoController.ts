@@ -40,13 +40,37 @@ export const updateTodo: RequestHandler = async (req: Request, res: Response) =>
   }
 }
 
-export const getTodos: RequestHandler = async (req: Request, res: Response) => {
+export const deleteTodo: RequestHandler = async (req: Request, res: Response) => {
   try {
-    const todos = await Todo.find()
-    res.status(200).json({ message: 'Todo List', data: todos })
+    const { id } = req.params
+    const isDeleted = await Todo.findByIdAndDelete(id)
+
+    if (!isDeleted) throw new Error('Failed to delete todo')
+
+    return res.status(200).json({ message: 'Todo deleted successfully', data: isDeleted })
   } catch (err: any) {
     return res.status(500).json({ message: err.message })
   }
 }
 
-export const 
+export const getTodos: RequestHandler = async (req: Request, res: Response) => {
+  try {
+    const todos = await Todo.find()
+    return res.status(200).json({ message: 'Todo List', data: todos })
+  } catch (err: any) {
+    return res.status(500).json({ message: err.message })
+  }
+}
+
+export const paginateTodos: RequestHandler = async (req: Request, res: Response) => {
+  try {
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || 4
+    const skip = (page - 1) * limit
+
+    const todos = await Todo.find().skip(skip).limit(limit)
+    const totalTodos = await Todo.countDocuments()
+
+    return res.status(200).json({ message: 'Paginate Todos', data: todos, totalItems: totalTodos })
+  } catch (err: any) {}
+}
