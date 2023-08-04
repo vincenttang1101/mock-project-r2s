@@ -21,11 +21,6 @@ export const updateTodo = createAsyncThunk('todo/updateTodo', async (todo: ITodo
   return response.data
 })
 
-export const deleteTodo = createAsyncThunk('todo/deleteTodo', async (_id: string) => {
-  const response = await todoApi.deleteTodo(_id)
-  return response.data
-})
-
 export const todoSlice = createSlice({
   name: 'todo',
   initialState,
