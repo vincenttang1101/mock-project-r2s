@@ -1,14 +1,17 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
+import todoLogo from '@assets/todoLogo.svg'
 import { useAppDispatch, useAppSelector } from '@app/hook'
 import { Title } from '@components/Title'
-import { isAuthenticated } from 'utils'
-import { AddTodo, TodoItem } from './components'
-import { FilterTodo } from './components/FilterTodo'
-import style from './style.module.scss'
 import { Loader } from '@components/Loader'
-import { getTodos } from './todoSlice'
+import { LIMIT_PAGES } from '@constants'
+import { isAuthenticated } from '@utils'
+import { AddTodo, PaginateTodos, TodoItem } from './components'
+import { FilterTodo } from './components/FilterTodo'
+import { paginateTodos } from './todoSlice'
+
+import style from './style.module.scss'
 
 export const TodoList = () => {
   const todos = useAppSelector((state) => state.todo.todos)
@@ -20,18 +23,20 @@ export const TodoList = () => {
   useEffect(() => {
     if (isAuthenticated()) {
       navigate('/')
-      dispatch(getTodos())
+      dispatch(paginateTodos({ startPage: 1, limit: LIMIT_PAGES }))
     } else navigate('/login')
-  }, [navigate])
+  }, [navigate, dispatch])
 
   return (
     <Container className={style['todos']}>
-      <Title label='Todo List' style={{ textAlign: 'center' }} />
-      <div className={style['todos__top']}>
+      <Title style={{ textAlign: 'center' }}>
+        <img src={todoLogo} />
+      </Title>
+      <div className={style['todos__addTodo']}>
         <AddTodo />
       </div>
-      <div className={style['todos__bottom']}>
-        <div className={style['bottom__filter']}>
+      <div className={style['todos__filterTodo']}>
+        <div className={style['filterTodo__formField']}>
           <label htmlFor='filter'>Filter By:</label>
           <FilterTodo />
         </div>
@@ -42,6 +47,7 @@ export const TodoList = () => {
           <div className={style['bottom__loader']}>{status === 'loading' && <Loader />}</div>
         </ul>
       </div>
+      <PaginateTodos />
     </Container>
   )
 }

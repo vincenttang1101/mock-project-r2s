@@ -1,21 +1,19 @@
-import { apiEndpoint } from '@constants';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
-import { useNavigate } from 'react-router-dom';
-
+import { ACCESS_TOKEN, API_BASE_URL } from '@constants'
+import axios, { InternalAxiosRequestConfig, AxiosResponse } from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const axiosClient = axios.create({
-  baseURL: apiEndpoint,
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json'
   }
 })
 
-
 // Add a request interceptor
 axiosClient.interceptors.request.use(
-  function (config: AxiosRequestConfig) {
+  function (config: InternalAxiosRequestConfig) {
     // Do something before request is sent
-    const accessToken = localStorage.getItem('access-token')
+    const accessToken = localStorage.getItem(ACCESS_TOKEN)
 
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`
@@ -26,9 +24,9 @@ axiosClient.interceptors.request.use(
     // Do something with request error
     const navigate = useNavigate()
     if (error.response && error.response.data && error.response.data.message === 'Token expired') {
-      localStorage.removeItem('access-token');
-      alert('Token expired');
-      navigate('/login');
+      localStorage.removeItem('access-token')
+      alert('Token expired')
+      navigate('/login')
     }
     return Promise.reject(error)
   }

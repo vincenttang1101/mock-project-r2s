@@ -3,17 +3,20 @@ import jwt from 'jsonwebtoken'
 import { Schema, model } from 'mongoose'
 import { IUser } from '../typing'
 
-const userSchema = new Schema<IUser>({
-  name: {
-    type: String
+const userSchema = new Schema<IUser>(
+  {
+    name: {
+      type: String
+    },
+    email: {
+      type: String
+    },
+    password: {
+      type: String
+    }
   },
-  email: {
-    type: String
-  },
-  password: {
-    type: String
-  }
-})
+  { timestamps: true }
+)
 
 userSchema.set('toJSON', {
   transform: function (doc, ret, options) {
