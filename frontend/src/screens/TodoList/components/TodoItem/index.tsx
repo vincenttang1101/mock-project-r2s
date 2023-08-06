@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { BsFillPencilFill, BsTrashFill } from 'react-icons/bs'
 import { BiSave } from 'react-icons/bi'
-import { MdAdd, MdOutlineCancel } from 'react-icons/md'
+import { MdOutlineCancel } from 'react-icons/md'
 import { useFormik } from 'formik'
 import { object, string } from 'yup'
 import { useAppDispatch } from '@app/hook'

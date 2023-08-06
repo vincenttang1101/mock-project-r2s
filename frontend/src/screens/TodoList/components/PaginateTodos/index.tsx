@@ -13,6 +13,7 @@ interface numbersPage {
 
 export const PaginateTodos = () => {
   const [numbersPage, setNumbersPage] = useState<numbersPage[]>([])
+  const [activeNumberPage, setActiveNumberPage] = useState<number>(1)
   const totalTodos = useAppSelector((state) => state.todo.totalTodos)
 
   const dispatch = useAppDispatch()
@@ -21,6 +22,7 @@ export const PaginateTodos = () => {
     const selectedPage = parseInt((e.target as any).textContent, 10)
 
     dispatch(paginateTodos({ startPage: selectedPage, limit: LIMIT_PAGES }))
+    setActiveNumberPage(selectedPage)
   }
 
   useEffect(() => {
@@ -39,7 +41,12 @@ export const PaginateTodos = () => {
     <Container className={style['paginateTodos']}>
       <Pagination>
         {numbersPage.map((numberPage, index) => (
-          <Pagination.Item key={index} data-page={numberPage.startPage} onClick={handlePaginateClick}>
+          <Pagination.Item
+            key={index}
+            data-page={numberPage.startPage}
+            onClick={handlePaginateClick}
+            active={numberPage.numberPage === activeNumberPage}
+          >
             {numberPage.numberPage}
           </Pagination.Item>
         ))}

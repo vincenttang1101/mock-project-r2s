@@ -53,16 +53,7 @@ export const AddTodo = () => {
           <span style={{ color: 'red' }}>{formikAdd.errors.priority}</span>
         ) : null}
       </div>
-      <FormField
-        style={{
-          color: 'black',
-          fontWeight: '900',
-          backgroundColor: '#7f53ac',
-          backgroundImage: 'linear-gradient(315deg, #7f53ac 0%, #647dee 74%)'
-        }}
-        field='Button'
-        type='submit'
-      >
+      <FormField className={style['addTodo__button']} field='Button' type='submit'>
         <GrAdd />
       </FormField>
     </form>
