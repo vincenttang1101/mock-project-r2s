@@ -8,7 +8,7 @@ import { useAppDispatch } from '@app/hook'
 import { FormField } from '@components/FormField'
 import { ITodo } from '@typing'
 import style from './style.module.scss'
-import { deleteTodo, updateTodo } from '@screens/TodoList/todoSlice'
+import { updateTodo } from '@screens/TodoList/todoSlice'
 
 interface ITodoItem {
   todo: ITodo
@@ -76,15 +76,15 @@ export const TodoItem = ({ todo }: ITodoItem) => {
     }
   }
 
-  const handleToggleRemoveCancel = () => {
-    if (isEditing) {
-      setIsEditing(false)
-    } else {
-      if (formikUpdate.values._id) {
-        dispatch(deleteTodo(formikUpdate.values._id))
-      }
-    }
-  }
+  // const handleToggleRemoveCancel = () => {
+  //   if (isEditing) {
+  //     setIsEditing(false)
+  //   } else {
+  //     if (formikUpdate.values._id) {
+  //       dispatch(deleteTodo(formikUpdate.values._id))
+  //     }
+  //   }
+  // }
 
   return (
     <li className={style['todo']}>
