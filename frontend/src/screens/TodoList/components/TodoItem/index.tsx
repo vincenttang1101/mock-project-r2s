@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BsFillPencilFill, BsTrashFill } from 'react-icons/bs'
+import { BiSave } from 'react-icons/bi'
 import { MdAdd, MdOutlineCancel } from 'react-icons/md'
 import { useFormik } from 'formik'
 import { object, string } from 'yup'
@@ -142,10 +143,15 @@ export const TodoItem = ({ todo }: ITodoItem) => {
           )}
         </div>
         <div className={style['task__right']}>
-          <span className={style['task__button']} onClick={handleToggleEditSave}>
-            {!isEditing ? <BsFillPencilFill /> : <MdAdd />}
+          <span className={`${style['task__button']} ${style['task__button--isSave']}`} onClick={handleToggleEditSave}>
+            {!isEditing ? <BsFillPencilFill /> : <BiSave />}
           </span>
-          <span className={style['task__button']}>{!isEditing ? <BsTrashFill /> : <MdOutlineCancel />}</span>
+          <span
+            className={`${style['task__button']} ${style['task__button--isCancel']}`}
+            onClick={handleToggleRemoveCancel}
+          >
+            {!isEditing ? <BsTrashFill /> : <MdOutlineCancel />}
+          </span>
         </div>
       </form>
     </li>

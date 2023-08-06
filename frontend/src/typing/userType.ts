@@ -3,4 +3,6 @@ export interface IUser {
   email: string
   password: string
   accessToken?: string
+  createdAt?: string
+  updatedAt?: string
 }
