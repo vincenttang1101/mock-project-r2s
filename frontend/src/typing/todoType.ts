@@ -3,10 +3,12 @@ export interface ITodo {
   title: string
   priority: string
   isCompleted: boolean
+  createdAt?: string
+  updatedAt?: string
 }
 
 export interface ITodoState {
   todos: ITodo[]
   status: 'idle' | 'loading' | 'failed'
-  totalItems: number
+  totalTodos: number
 }

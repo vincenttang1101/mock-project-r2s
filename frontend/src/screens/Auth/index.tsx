@@ -4,9 +4,9 @@ import Container from 'react-bootstrap/Container'
 import { useFormik } from 'formik'
 import { object, string, ref } from 'yup'
 import userApi from '@api/userApi'
-import { isAuthenticated } from 'utils'
 import { Title } from '@components'
 import { FormField } from '@components/FormField'
+import { isAuthenticated } from '@utils'
 import style from './style.module.scss'
 
 interface IType {
@@ -80,7 +80,7 @@ export const Auth = ({ type }: IType) => {
     <Container className={style['auth']}>
       {type === 'Login' ? (
         <>
-          <Title label='Login' style={{ textAlign: 'center' }} />
+          <Title style={{ textAlign: 'center', fontSize: '2rem', fontWeight: '600' }}>Login</Title>{' '}
           <form onSubmit={formikLogin.handleSubmit}>
             <FormField
               field='Input'
@@ -119,7 +119,7 @@ export const Auth = ({ type }: IType) => {
         </>
       ) : (
         <>
-          <Title label='Register' style={{ textAlign: 'center' }} />
+          <Title style={{ textAlign: 'center', fontSize: '2rem', fontWeight: '600' }}>Register</Title>
           <form onSubmit={formikRegister.handleSubmit}>
             <FormField
               field='Input'

@@ -2,36 +2,45 @@ import { useState, useEffect } from 'react'
 import { Container } from 'react-bootstrap'
 import Pagination from 'react-bootstrap/Pagination'
 import { useAppSelector, useAppDispatch } from '@app/hook'
-import style from './style.module.scss'
+import { LIMIT_PAGES } from '@constants'
 import { paginateTodos } from '@screens/TodoList/todoSlice'
+import style from './style.module.scss'
+
+interface numbersPage {
+  startPage: number
+  numberPage: number
+}
 
 export const PaginateTodos = () => {
-  const [numbersPage, setNumbersPage] = useState<number[]>([])
-  const totalItems = useAppSelector((state) => state.todo.totalItems)
+  const [numbersPage, setNumbersPage] = useState<numbersPage[]>([])
+  const totalTodos = useAppSelector((state) => state.todo.totalTodos)
 
   const dispatch = useAppDispatch()
 
   const handlePaginateClick = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    const selectedPage = parseInt(e.target.textContent, 10)
-    const limit = 4
-    const start = (selectedPage - 1) * limit + 1
-    dispatch(paginateTodos({ page: start, limit }))
+    const selectedPage = parseInt((e.target as any).textContent, 10)
+
+    dispatch(paginateTodos({ startPage: selectedPage, limit: LIMIT_PAGES }))
   }
 
   useEffect(() => {
-    const pages = []
-    for (let page = 1; page <= totalItems / 4; page++) {
-      pages.push(page)
+    const numbersPage = []
+    let startPage = totalTodos
+
+    for (let numberPage = 1; numberPage <= Math.ceil(totalTodos / LIMIT_PAGES); numberPage++) {
+      startPage = numberPage !== 1 ? startPage - LIMIT_PAGES : startPage - LIMIT_PAGES - 1
+
+      numbersPage.push({ numberPage, startPage })
     }
-    setNumbersPage(pages)
-  }, [totalItems])
+    setNumbersPage(numbersPage)
+  }, [totalTodos])
 
   return (
     <Container className={style['paginateTodos']}>
       <Pagination>
-        {numbersPage.map((page, index) => (
-          <Pagination.Item key={index} onClick={handlePaginateClick}>
-            {page}
+        {numbersPage.map((numberPage, index) => (
+          <Pagination.Item key={index} data-page={numberPage.startPage} onClick={handlePaginateClick}>
+            {numberPage.numberPage}
           </Pagination.Item>
         ))}
       </Pagination>

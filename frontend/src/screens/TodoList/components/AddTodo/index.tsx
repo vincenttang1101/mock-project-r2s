@@ -1,4 +1,4 @@
-import { MdAdd } from 'react-icons/md'
+import { GrAdd } from 'react-icons/gr'
 import { useFormik } from 'formik'
 import { object, string } from 'yup'
 import { useAppDispatch } from '@app/hook'
@@ -53,8 +53,17 @@ export const AddTodo = () => {
           <span style={{ color: 'red' }}>{formikAdd.errors.priority}</span>
         ) : null}
       </div>
-      <FormField field='Button' type='submit' variant='outline-primary'>
-        <MdAdd />
+      <FormField
+        style={{
+          color: 'black',
+          fontWeight: '900',
+          backgroundColor: '#7f53ac',
+          backgroundImage: 'linear-gradient(315deg, #7f53ac 0%, #647dee 74%)'
+        }}
+        field='Button'
+        type='submit'
+      >
+        <GrAdd />
       </FormField>
     </form>
   )
