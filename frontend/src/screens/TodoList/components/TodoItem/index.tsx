@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BsFillPencilFill, BsTrashFill } from 'react-icons/bs'
+import { BiSave } from 'react-icons/bi'
 import { MdAdd, MdOutlineCancel } from 'react-icons/md'
 import { useFormik } from 'formik'
 import { object, string } from 'yup'
@@ -7,7 +8,7 @@ import { useAppDispatch } from '@app/hook'
 import { FormField } from '@components/FormField'
 import { ITodo } from '@typing'
 import style from './style.module.scss'
-import { deleteTodo, updateTodo } from '@screens/TodoList/todoSlice'
+import { updateTodo } from '@screens/TodoList/todoSlice'
 
 interface ITodoItem {
   todo: ITodo
@@ -75,15 +76,15 @@ export const TodoItem = ({ todo }: ITodoItem) => {
     }
   }
 
-  const handleToggleRemoveCancel = () => {
-    if (isEditing) {
-      setIsEditing(false)
-    } else {
-      if (formikUpdate.values._id) {
-        dispatch(deleteTodo(formikUpdate.values._id))
-      }
-    }
-  }
+  // const handleToggleRemoveCancel = () => {
+  //   if (isEditing) {
+  //     setIsEditing(false)
+  //   } else {
+  //     if (formikUpdate.values._id) {
+  //       dispatch(deleteTodo(formikUpdate.values._id))
+  //     }
+  //   }
+  // }
 
   return (
     <li className={style['todo']}>
@@ -142,10 +143,13 @@ export const TodoItem = ({ todo }: ITodoItem) => {
           )}
         </div>
         <div className={style['task__right']}>
-          <span className={style['task__button']} onClick={handleToggleEditSave}>
-            {!isEditing ? <BsFillPencilFill /> : <MdAdd />}
+          <span className={`${style['task__button']} ${style['task__button--isSave']}`} onClick={handleToggleEditSave}>
+            {!isEditing ? <BsFillPencilFill /> : <BiSave />}
           </span>
-          <span className={style['task__button']} onClick={handleToggleRemoveCancel}>
+          <span
+            className={`${style['task__button']} ${style['task__button--isCancel']}`}
+            onClick={handleToggleRemoveCancel}
+          >
             {!isEditing ? <BsTrashFill /> : <MdOutlineCancel />}
           </span>
         </div>
