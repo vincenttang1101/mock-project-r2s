@@ -4,7 +4,7 @@ import { BiSave } from 'react-icons/bi'
 import { MdOutlineCancel } from 'react-icons/md'
 import { useFormik } from 'formik'
 import { object, string } from 'yup'
-import { useAppDispatch } from '@app/hook'
+import { useAppDispatch, useAppSelector } from '@app/hook'
 import { FormField } from '@components/FormField'
 import { ITodo } from '@typing'
 import style from './style.module.scss'
@@ -16,6 +16,9 @@ interface ITodoItem {
 
 export const TodoItem = ({ todo }: ITodoItem) => {
   const [isEditing, setIsEditing] = useState(false)
+
+  const startPage = useAppSelector((state) => state.todo.startPage)
+  const limit = useAppSelector((state) => state.todo.limit)
 
   const dispatch = useAppDispatch()
 
@@ -81,7 +84,8 @@ export const TodoItem = ({ todo }: ITodoItem) => {
       setIsEditing(false)
     } else {
       if (formikUpdate.values._id) {
-        dispatch(deleteTodo(formikUpdate.values._id))
+        const params = { _id: formikUpdate.values._id, startPage, limit }
+        dispatch(deleteTodo(params))
       }
     }
   }

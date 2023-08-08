@@ -1,22 +1,25 @@
 import axiosClient from '@api/axiosClient'
 import { TODO_API_URL } from '@constants'
-import { ITodo, IDataResponse } from '@typing'
+import { IDataResponse, ITodoAPI, ITodoFilter } from '@typing'
 
 const todoApi = {
-  getTodos(): Promise<IDataResponse<ITodo[]>> {
+  getTodos(): Promise<IDataResponse<ITodoAPI[]>> {
     return axiosClient.get(TODO_API_URL)
   },
-  addTodo(todo: ITodo): Promise<IDataResponse<ITodo>> {
+  addTodo(todo: ITodoAPI): Promise<IDataResponse<ITodoAPI>> {
     return axiosClient.post(TODO_API_URL, todo)
   },
-  updateTodo(todo: ITodo): Promise<IDataResponse<ITodo>> {
+  updateTodo(todo: ITodoAPI | any): Promise<IDataResponse<ITodoAPI>> {
     return axiosClient.patch(`${TODO_API_URL}/${todo._id}`, todo)
   },
-  deleteTodo(_id: string): Promise<IDataResponse<any>> {
-    return axiosClient.delete(`${TODO_API_URL}/${_id}`)
+  deleteTodo(_id: string, startPage: number, limit: number): Promise<IDataResponse<ITodoAPI[]>> {
+    return axiosClient.delete(`${TODO_API_URL}/${_id}/?startPage=${startPage}&limit=${limit}`)
   },
-  paginateTodos(startPage: number, limit: number): Promise<IDataResponse<ITodo[]>> {
-    return axiosClient.get(`${TODO_API_URL}/paginate/?startPage=${startPage}&limit=${limit}`)
+  paginateTodos(startPage: number, limit: number, type: ITodoFilter): Promise<IDataResponse<ITodoAPI[]>> {
+    return axiosClient.post(`${TODO_API_URL}/paginate/?startPage=${startPage}&limit=${limit}`, type)
+  },
+  filterTodos(type: ITodoFilter): Promise<IDataResponse<ITodoAPI[]>> {
+    return axiosClient.post(`${TODO_API_URL}/filter`, type)
   }
 }
 

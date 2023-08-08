@@ -15,13 +15,14 @@ export const PaginateTodos = () => {
   const [numbersPage, setNumbersPage] = useState<numbersPage[]>([])
   const [activeNumberPage, setActiveNumberPage] = useState<number>(1)
   const totalTodos = useAppSelector((state) => state.todo.totalTodos)
+  const filterType = useAppSelector((state) => state.todo.filterType)
 
   const dispatch = useAppDispatch()
 
   const handlePaginateClick = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     const selectedPage = parseInt((e.target as any).textContent, 10)
 
-    dispatch(paginateTodos({ startPage: selectedPage, limit: LIMIT_PAGES }))
+    dispatch(paginateTodos({ startPage: selectedPage, limit: LIMIT_PAGES, filterType }))
     setActiveNumberPage(selectedPage)
   }
 

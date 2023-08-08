@@ -73,8 +73,7 @@
         cursor: pointer;
 
         &--isSave {
-          background-color: #2876f9;
-          background-image: linear-gradient(315deg, #2876f9 0%, #6d17cb 74%);
+          background: linear-gradient(315deg, #7f53ac 0%, #647dee 74%);
 
           &:hover {
             background: linear-gradient(315deg, #48c3eb 0%, #647dee 74%);
@@ -100,7 +99,7 @@
       flex-direction: column;
       gap: 0.5rem;
 
-      .task__left > .task__check {
+      .task__left .task__check {
         background-color: red;
         display: none;
       }
