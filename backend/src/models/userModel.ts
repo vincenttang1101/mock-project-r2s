@@ -1,19 +1,22 @@
-import { Schema, model } from 'mongoose'
-import { IUser } from '../type'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { Schema, model } from 'mongoose'
+import { IUser } from '../typing'
 
-const userSchema = new Schema<IUser>({
-  name: {
-    type: String
+const userSchema = new Schema<IUser>(
+  {
+    name: {
+      type: String
+    },
+    email: {
+      type: String
+    },
+    password: {
+      type: String
+    }
   },
-  email: {
-    type: String
-  },
-  password: {
-    type: String
-  }
-})
+  { timestamps: true }
+)
 
 userSchema.set('toJSON', {
   transform: function (doc, ret, options) {
@@ -34,7 +37,7 @@ userSchema.pre('save', async function (next) {
 userSchema.methods.generateAuthToken = async function () {
   // Generate an auth token for the user
   const user = this
-  const accessToken = jwt.sign({ _id: user._id }, process.env.JWT_KEY || 'VincentTang')
+  const accessToken = jwt.sign({ _id: user._id }, process.env.JWT_KEY || 'VincentTang', { expiresIn: '24h' })
   await user.save()
 
   return accessToken

@@ -1,0 +1,32 @@
+@import '../../../../mixins';
+
+.addTodo {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+
+  &__title {
+    flex: 0.6;
+  }
+
+  &__priority {
+    flex: 0.4;
+  }
+
+  &__button {
+    color: black;
+    font-weight: 900;
+    background: linear-gradient(315deg, #7f53ac 0%, #647dee 74%);
+
+    &:hover {
+      background: linear-gradient(315deg, #48c3eb 0%, #647dee 74%);
+    }
+  }
+}
+
+@include mediumDeviceSize {
+  .addTodo {
+    flex-direction: column;
+    align-items: normal;
+  }
+}

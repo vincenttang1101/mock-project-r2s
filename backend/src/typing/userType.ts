@@ -5,6 +5,4 @@ export interface IUser extends Document {
   name: string
   email: string
   password: string
-  toJSON(): any
-  findByCredentials(email: string, password: string): any
 }

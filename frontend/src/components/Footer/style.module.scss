@@ -1,33 +1,33 @@
 .footer {
-    position: absolute;
-    bottom: 0;
+  position: absolute;
+  bottom: -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .footer__icon {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 1rem 0;
+    gap: 1rem;
 
-    .footer__icon {
-        display: flex;
-        padding: 1rem 0;
-        gap: 1rem;
+    .icon {
+      font-size: 2rem;
 
-        .icon {
-            font-size: 2rem;
+      &--fb {
+        color: #3b5998;
+      }
 
-            &--fb {
-                color: #3b5998;
-            }
+      &--github {
+        color: #212529;
+      }
 
-            &--github {
-                color: #212529
-            }
-
-            &--ytb {
-                color: #FF0000
-            }
-        }
+      &--ytb {
+        color: #ff0000;
+      }
     }
+  }
 
-    p {
-        font-weight: 600
-    }
+  p {
+    font-weight: 600;
+  }
 }

@@ -1,7 +1,9 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import { ACCESS_TOKEN, API_BASE_URL } from '@constants'
+import axios, { InternalAxiosRequestConfig, AxiosResponse } from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const axiosClient = axios.create({
-  baseURL: 'http://localhost:3333/api',
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json'
   }
@@ -9,9 +11,9 @@ const axiosClient = axios.create({
 
 // Add a request interceptor
 axiosClient.interceptors.request.use(
-  function (config: AxiosRequestConfig) {
+  function (config: InternalAxiosRequestConfig) {
     // Do something before request is sent
-    const accessToken = localStorage.getItem('access-token')
+    const accessToken = localStorage.getItem(ACCESS_TOKEN)
 
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`
@@ -20,6 +22,12 @@ axiosClient.interceptors.request.use(
   },
   function (error) {
     // Do something with request error
+    const navigate = useNavigate()
+    if (error.response && error.response.data && error.response.data.message === 'Token expired') {
+      localStorage.removeItem('access-token')
+      alert('Token expired')
+      navigate('/login')
+    }
     return Promise.reject(error)
   }
 )
@@ -32,8 +40,6 @@ axiosClient.interceptors.response.use(
     return response.data
   },
   function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
     return Promise.reject(error)
   }
 )

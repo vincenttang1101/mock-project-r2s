@@ -2,7 +2,6 @@ import { ReactNode } from 'react'
 import { FormSelect } from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import style from './style.module.scss'
 
 type Field = 'Input' | 'Select' | 'Button' | 'Check'
 type Type = 'text' | 'email' | 'password' | 'checkbox' | 'submit' | 'reset'
@@ -15,30 +14,30 @@ interface IFormFile {
   variant?: 'primary' | 'outline-secondary' | string
   children?: ReactNode
   [key: string]: unknown
-  styleCustom?: object
+  style?: object
 }
 
-export const FormField = ({ field, type, label, name, variant, children, styleCustom, ...rest }: IFormFile) => {
-  const handleSwitchField = (field: string) => {
+export const FormField = ({ field, type, label, name, variant, children, style, ...rest }: IFormFile) => {
+  const renderField = (field: string) => {
     switch (field) {
       case 'Input':
-        return <Form.Control type={type} placeholder={label} name={name} {...rest} />
+        return <Form.Control type={type} placeholder={label} name={name} style={style} {...rest} />
       case 'Button':
         return (
-          <Button type='submit' variant={variant} {...rest}>
+          <Button type='submit' variant={variant} style={style} {...rest}>
             {children}
           </Button>
         )
       case 'Select':
         return (
-          <FormSelect name={name} {...rest}>
+          <FormSelect name={name} style={style} {...rest}>
             {children}
           </FormSelect>
         )
       case 'Check':
         return (
-          <Form.Check name={name} {...rest}>
-            <Form.Check.Input style={styleCustom} />
+          <Form.Check>
+            <Form.Check.Input name={name} style={style} {...rest} />
           </Form.Check>
         )
       default:
@@ -46,5 +45,5 @@ export const FormField = ({ field, type, label, name, variant, children, styleCu
     }
   }
 
-  return <>{handleSwitchField(field)}</>
+  return <>{renderField(field)}</>
 }

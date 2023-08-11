@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
-import { User } from '../models'
 import { object, string, ValidationError } from 'yup'
+import { User } from '../models/'
 
 export const RegisterUser: RequestHandler = async (req: Request, res: Response) => {
   try {
@@ -22,7 +22,7 @@ export const RegisterUser: RequestHandler = async (req: Request, res: Response) 
     const newUser = new User(req.body)
     await newUser.save()
 
-    return res.status(200).json({ message: 'User created successfully', data: newUser })
+    return res.status(200).json({ message: 'User registered successfully', data: newUser })
   } catch (err: any) {
     if (err instanceof ValidationError) {
       const errors = {}
@@ -42,7 +42,7 @@ export const LoginUser: RequestHandler = async (req: Request, res: Response) => 
     const user = await User.findByCredentials(email, password)
     const accessToken = await user.generateAuthToken()
 
-    return res.status(200).json({ message: 'User login successfully', data: { user, accessToken } })
+    return res.status(200).json({ message: 'User login successfully', data: user, accessToken })
   } catch (err: any) {
     return res.status(500).json({ message: err.message })
   }

@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { LoginUser, RegisterUser, getUsers } from '../controllers'
-import { checkAuthToken } from '../middleware'
+import { checkAuthToken } from '../middlewares'
 
 const router = Router()
 

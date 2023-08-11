@@ -1,9 +1,9 @@
+import { json, urlencoded } from 'body-parser'
+import 'dotenv/config'
+import cors from 'cors'
 import express from 'express'
 import db from 'mongoose'
-import { json, urlencoded } from 'body-parser'
-import cors from 'cors'
-import 'dotenv/config'
-import { userRoutes } from './routes'
+import { todoRoutes, userRoutes } from './routes'
 
 const app = express()
 
@@ -21,6 +21,7 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
 })
 
 app.use('/api/users', userRoutes)
+app.use('/api/todos', todoRoutes)
 
 db.connect(dbUrl)
   .then(() => console.log('Connected DB'))

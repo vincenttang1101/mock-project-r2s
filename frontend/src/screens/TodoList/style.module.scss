@@ -1,8 +1,31 @@
+@import '../../mixins';
+
 .todos {
-  max-width: 70% !important;
+  max-width: 50% !important;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  &__filterTodo {
+    margin-top: 0.8rem;
+    display: flex;
+    flex-direction: column;
+
+    gap: 1rem;
+
+    > .filterTodo__formField {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      > label {
+        font-weight: 600;
+      }
+      > select {
+        width: 30%;
+      }
+    }
+  }
 
   &__button {
     display: flex;
@@ -11,76 +34,26 @@
   }
 
   &__list {
+    position: relative;
     border: 1rem solid #ecedf6;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.12);
     background-color: #ecedf6;
     border-radius: 0.5rem;
     list-style-type: none;
     padding: 0;
     margin: 0;
   }
-}
 
-.todo {
-  background-color: white;
-  opacity: 0.9;
-  margin-bottom: 23px;
-  padding: 10px 10px;
-
-  li:last-child {
-    margin-bottom: 0;
-  }
-  &__task {
-    display: flex;
-    justify-content: space-between;
-
-    > .task__left {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-
-      > .task__title {
-        font-size: 1.1rem;
-        font-weight: bolder;
-        &--completed {
-          text-decoration: line-through;
-          font-style: italic;
-        }
-      }
-
-      > .task__priority {
-        font-weight: bold;
-        border: 2px solid gray;
-        border-radius: 3px;
-        padding: 0.5px 5px;
-
-        &--isLow {
-          color: gray;
-        }
-        &--isMedium {
-          color: blue;
-        }
-        &--isHigh {
-          color: red;
-        }
-      }
-    }
-    > .task__right {
-      display: flex;
-      gap: 0.5rem;
-      > .task__button {
-        background-color: #eee;
-        border-radius: 5px;
-        padding: 0.5rem;
-        cursor: pointer;
-      }
-
-      > .task__button:hover {
-        background-color: #dedfe1;
-      }
-    }
+  .bottom__loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
   }
 }
 
-li.todo:last-child {
-  margin-bottom: 0;
+@include mediumDeviceSize {
+  .todos {
+    max-width: 100% !important;
+  }
 }

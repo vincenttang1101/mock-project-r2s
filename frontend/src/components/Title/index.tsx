@@ -1,8 +1,10 @@
+import { ReactNode } from 'react'
+
 interface ITitle {
-  name: string
-  [key: string]: unknown
+  children?: ReactNode
+  style?: object
 }
 
-export const Title = ({ name, ...rest }: ITitle) => {
-  return <h1 {...rest}>{name}</h1>
+export const Title = ({ children, style }: ITitle) => {
+  return <div style={style}>{children}</div>
 }

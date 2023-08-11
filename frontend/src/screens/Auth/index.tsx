@@ -3,11 +3,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import Container from 'react-bootstrap/Container'
 import { useFormik } from 'formik'
 import { object, string, ref } from 'yup'
-import { FormField } from '@components/FormField'
-import { Title } from '@components'
 import userApi from '@api/userApi'
-import { isAuthenticated } from '@constants'
+import { Title } from '@components'
+import { FormField } from '@components/FormField'
+import { isAuthenticated } from '@utils'
 import style from './style.module.scss'
+import { ACCESS_TOKEN } from '@constants'
 
 interface IType {
   type: string
@@ -31,11 +32,13 @@ export const Auth = ({ type }: IType) => {
       email: string().required('Email is a required field').email('Invalid email address'),
       password: string().required('Password is a required field')
     }),
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       userApi
         .loginUser(values)
         .then((response) => {
-          localStorage.setItem('access-token', response.data.accessToken!)
+          localStorage.setItem(ACCESS_TOKEN, response.accessToken!)
+          localStorage.setItem('user_id', response.data._id!)
+          resetForm()
           navigate('/')
         })
         .catch((error) => alert(error.response.data.message))
@@ -55,7 +58,7 @@ export const Auth = ({ type }: IType) => {
       password: string()
         .required('Password is a required field')
         .min(10, 'Too short !')
-        .max(30, 'Too Long !')
+        .max(30, 'Too long !')
         .matches(/^(?=.*[a-z])/, 'Must Contain One Lowercase Character')
         .matches(/^(?=.*[A-Z])/, 'Must Contain One Uppercase Character')
         .matches(/^(?=.*[0-9])/, 'Must Contain One Number Character')
@@ -64,10 +67,13 @@ export const Auth = ({ type }: IType) => {
         .required('Repeat Password is a required field')
         .oneOf([ref('password')], 'Your passwords do not match.')
     }),
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       userApi
         .registerUser(values)
-        .then(() => navigate('/login'))
+        .then(() => {
+          resetForm()
+          navigate('/login')
+        })
         .catch((error) => alert(error.response.data.errors.email))
     }
   })
@@ -76,7 +82,7 @@ export const Auth = ({ type }: IType) => {
     <Container className={style['auth']}>
       {type === 'Login' ? (
         <>
-          <Title name='Login' style={{ textAlign: 'center' }} />
+          <Title style={{ textAlign: 'center', fontSize: '2rem', fontWeight: '600' }}>Login</Title>
           <form onSubmit={formikLogin.handleSubmit}>
             <FormField
               field='Input'
@@ -104,7 +110,6 @@ export const Auth = ({ type }: IType) => {
             <span>
               Don't have an account?
               <Link to='/register' style={{ textDecoration: 'none' }}>
-                {' '}
                 Register
               </Link>
             </span>
@@ -115,7 +120,7 @@ export const Auth = ({ type }: IType) => {
         </>
       ) : (
         <>
-          <Title name='Register' style={{ textAlign: 'center' }} />
+          <Title style={{ textAlign: 'center', fontSize: '2rem', fontWeight: '600' }}>Register</Title>
           <form onSubmit={formikRegister.handleSubmit}>
             <FormField
               field='Input'
