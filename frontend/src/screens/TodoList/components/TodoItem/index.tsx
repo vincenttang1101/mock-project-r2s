@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { BsFillPencilFill, BsTrashFill } from 'react-icons/bs'
 import { BiSave } from 'react-icons/bi'
 import { MdOutlineCancel } from 'react-icons/md'
+import dayjs from 'dayjs'
 import { useFormik } from 'formik'
 import { object, string } from 'yup'
 import { useAppDispatch, useAppSelector } from '@app/hook'
@@ -115,6 +116,7 @@ export const TodoItem = ({ todo }: ITodoItem) => {
 
   return (
     <li className={style['todo']}>
+      <span className={`${style['todo__createdAt']}`}>{dayjs(todo.createdAt).format('DD//MM/YYYY hh:mm:ss')}</span>
       <form
         onSubmit={formikTodo.handleSubmit}
         className={`${style['todo__task']} ${isEditing && style['todo__task--isEditing']}`}

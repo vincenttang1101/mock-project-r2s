@@ -6,6 +6,10 @@
   margin-bottom: 23px;
   padding: 10px 10px;
 
+  &__createdAt {
+    font-weight: 600;
+  }
+
   &__task {
     display: flex;
     justify-content: space-between;
@@ -130,6 +134,7 @@
     > .task__left > .task__title {
       flex: 1;
     }
+
     > .task__right {
       flex-direction: column;
       margin-top: 20px;
