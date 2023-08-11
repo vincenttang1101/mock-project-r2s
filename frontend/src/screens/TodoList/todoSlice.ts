@@ -51,7 +51,6 @@ export const deleteTodo = createAsyncThunk('todo/deleteTodo', async (params: IDe
 
 export const paginateTodos = createAsyncThunk('todo/paginateTodos', async (params: IPaginateParams) => {
   const response = await todoApi.paginateTodos(params.startPage, params.limit, params.filterType)
-
   return response
 })
 
@@ -137,8 +136,8 @@ export const todoSlice = createSlice({
         state.totalTodos = action.payload.totalTodos
         state.startPage = action.payload.startPage
         state.limit = action.payload.limit
-        state.filterType = action.payload.filterType
       }
+      state.filterType = action.payload.filterType
     })
     builder.addCase(paginateTodos.rejected, (state) => {
       state.status = 'failed'
