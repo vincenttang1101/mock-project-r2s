@@ -8,6 +8,7 @@ import { Title } from '@components'
 import { FormField } from '@components/FormField'
 import { isAuthenticated } from '@utils'
 import style from './style.module.scss'
+import { ACCESS_TOKEN } from '@constants'
 
 interface IType {
   type: string
@@ -35,7 +36,8 @@ export const Auth = ({ type }: IType) => {
       userApi
         .loginUser(values)
         .then((response) => {
-          localStorage.setItem('access-token', response.data.accessToken!)
+          localStorage.setItem(ACCESS_TOKEN, response.accessToken!)
+          localStorage.setItem('user_id', response.data._id!)
           resetForm()
           navigate('/')
         })
@@ -80,7 +82,7 @@ export const Auth = ({ type }: IType) => {
     <Container className={style['auth']}>
       {type === 'Login' ? (
         <>
-          <Title style={{ textAlign: 'center', fontSize: '2rem', fontWeight: '600' }}>Login</Title>{' '}
+          <Title style={{ textAlign: 'center', fontSize: '2rem', fontWeight: '600' }}>Login</Title>
           <form onSubmit={formikLogin.handleSubmit}>
             <FormField
               field='Input'
@@ -108,7 +110,6 @@ export const Auth = ({ type }: IType) => {
             <span>
               Don't have an account?
               <Link to='/register' style={{ textDecoration: 'none' }}>
-                {' '}
                 Register
               </Link>
             </span>

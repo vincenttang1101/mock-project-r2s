@@ -2,53 +2,51 @@ import { useState, useEffect } from 'react'
 import { Container } from 'react-bootstrap'
 import Pagination from 'react-bootstrap/Pagination'
 import { useAppSelector, useAppDispatch } from '@app/hook'
-import { LIMIT_PAGES } from '@constants'
+import { INITIAL_LIMIT_PAGE } from '@constants'
 import { paginateTodos } from '@screens/TodoList/todoSlice'
 import style from './style.module.scss'
 
-interface numbersPage {
-  startPage: number
-  numberPage: number
-}
-
 export const PaginateTodos = () => {
-  const [numbersPage, setNumbersPage] = useState<numbersPage[]>([])
-  const [activeNumberPage, setActiveNumberPage] = useState<number>(1)
+  const [gatherPages, setGatherPages] = useState<number[]>([])
   const totalTodos = useAppSelector((state) => state.todo.totalTodos)
+
+  const limit = useAppSelector((state) => state.todo.limit)
   const filterType = useAppSelector((state) => state.todo.filterType)
+  const startPageRedux = useAppSelector((state) => state.todo.startPage)
 
   const dispatch = useAppDispatch()
 
   const handlePaginateClick = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     const selectedPage = parseInt((e.target as any).textContent, 10)
 
-    dispatch(paginateTodos({ startPage: selectedPage, limit: LIMIT_PAGES, filterType }))
-    setActiveNumberPage(selectedPage)
+    const totalPages = Math.ceil(totalTodos / INITIAL_LIMIT_PAGE)
+    const remainder = totalTodos % limit === 0 ? 4 : totalTodos % limit
+    const limitUpdated = selectedPage === totalPages ? remainder : INITIAL_LIMIT_PAGE
+
+    dispatch(paginateTodos({ startPage: selectedPage, limit: limitUpdated, filterType }))
   }
 
   useEffect(() => {
-    const numbersPage = []
-    let startPage = totalTodos
+    const gatherPages = []
 
-    for (let numberPage = 1; numberPage <= Math.ceil(totalTodos / LIMIT_PAGES); numberPage++) {
-      startPage = numberPage !== 1 ? startPage - LIMIT_PAGES : startPage - LIMIT_PAGES - 1
-
-      numbersPage.push({ numberPage, startPage })
+    for (let startPageTemp = 1; startPageTemp <= Math.ceil(totalTodos / INITIAL_LIMIT_PAGE); startPageTemp++) {
+      gatherPages.push(startPageTemp)
     }
-    setNumbersPage(numbersPage)
+
+    setGatherPages(gatherPages)
   }, [totalTodos])
 
   return (
     <Container className={style['paginateTodos']}>
       <Pagination>
-        {numbersPage.map((numberPage, index) => (
+        {gatherPages.map((page, index) => (
           <Pagination.Item
             key={index}
-            data-page={numberPage.startPage}
             onClick={handlePaginateClick}
-            active={numberPage.numberPage === activeNumberPage}
+            active={page === startPageRedux}
+            linkStyle={{ cursor: 'pointer' }}
           >
-            {numberPage.numberPage}
+            {page}
           </Pagination.Item>
         ))}
       </Pagination>

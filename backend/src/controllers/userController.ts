@@ -42,7 +42,7 @@ export const LoginUser: RequestHandler = async (req: Request, res: Response) => 
     const user = await User.findByCredentials(email, password)
     const accessToken = await user.generateAuthToken()
 
-    return res.status(200).json({ message: 'User login successfully', data: { user, accessToken } })
+    return res.status(200).json({ message: 'User login successfully', data: user, accessToken })
   } catch (err: any) {
     return res.status(500).json({ message: err.message })
   }

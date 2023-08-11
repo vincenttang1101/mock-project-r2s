@@ -18,7 +18,7 @@ interface IFormFile {
 }
 
 export const FormField = ({ field, type, label, name, variant, children, style, ...rest }: IFormFile) => {
-  const handleSwitchField = (field: string) => {
+  const renderField = (field: string) => {
     switch (field) {
       case 'Input':
         return <Form.Control type={type} placeholder={label} name={name} style={style} {...rest} />
@@ -45,5 +45,5 @@ export const FormField = ({ field, type, label, name, variant, children, style, 
     }
   }
 
-  return <>{handleSwitchField(field)}</>
+  return <>{renderField(field)}</>
 }

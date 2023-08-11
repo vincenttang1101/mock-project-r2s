@@ -14,10 +14,10 @@ export interface ITodoAPI {
   updatedAt: string
 }
 
-export interface ITodoFilter {
+export interface ITodosFilter {
+  user_id?: string | null
   priority?: string
   isCompleted?: string
-  type?: object
 }
 
 export interface ITodoState {
@@ -26,5 +26,5 @@ export interface ITodoState {
   totalTodos: number
   startPage: number
   limit: number
-  filterType: object
+  filterType: ITodosFilter
 }

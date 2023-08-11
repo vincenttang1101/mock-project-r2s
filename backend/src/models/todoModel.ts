@@ -1,4 +1,4 @@
-import { Schema, Types, model } from 'mongoose'
+import { Schema, model } from 'mongoose'
 import { ITodo } from '../typing/'
 
 const todoSchema = new Schema<ITodo>(
@@ -11,6 +11,10 @@ const todoSchema = new Schema<ITodo>(
     },
     isCompleted: {
       type: Boolean
+    },
+    user_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
     }
   },
   { timestamps: true }

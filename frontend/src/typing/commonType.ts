@@ -4,4 +4,5 @@ export interface IDataResponse<T> {
   startPage: number
   limit: number
   filterType: object
+  accessToken: string
 }

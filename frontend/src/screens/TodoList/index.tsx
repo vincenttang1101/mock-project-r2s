@@ -5,12 +5,11 @@ import todoLogo from '@assets/todoLogo.svg'
 import { useAppDispatch, useAppSelector } from '@app/hook'
 import { Title } from '@components/Title'
 import { Loader } from '@components/Loader'
-import { LIMIT_PAGES } from '@constants'
-import { isAuthenticated } from '@utils'
+import { INITIAL_LIMIT_PAGE } from '@constants'
+import { getUserID, isAuthenticated } from '@utils'
 import { AddTodo, PaginateTodos, TodoItem } from './components'
 import { FilterTodo } from './components/FilterTodo'
 import { paginateTodos } from './todoSlice'
-
 import style from './style.module.scss'
 
 export const TodoList = () => {
@@ -23,7 +22,7 @@ export const TodoList = () => {
   useEffect(() => {
     if (isAuthenticated()) {
       navigate('/')
-      dispatch(paginateTodos({ startPage: 1, limit: LIMIT_PAGES }))
+      dispatch(paginateTodos({ startPage: 1, limit: INITIAL_LIMIT_PAGE, filterType: { user_id: getUserID() } }))
     } else navigate('/login')
   }, [navigate, dispatch])
 

@@ -5,6 +5,7 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import { isAuthenticated } from 'utils'
 import reactLogo from '@assets/react.svg'
+import { ACCESS_TOKEN } from '@constants'
 import style from './style.module.scss'
 
 export const Header = () => {
@@ -13,7 +14,8 @@ export const Header = () => {
   const location = useLocation()
 
   function handleLogout() {
-    localStorage.removeItem('access-token')
+    localStorage.removeItem(ACCESS_TOKEN)
+    localStorage.removeItem('user_id')
     setAuthenticated(false)
   }
 

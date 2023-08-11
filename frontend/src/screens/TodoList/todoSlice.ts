@@ -1,6 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import todoApi from '@api/todoApi'
-import { ITodoAPI, ITodoFilter, ITodoState } from '@typing'
+import { ITodo, ITodoAPI, ITodoState, ITodosFilter } from '@typing'
+import { getUserID } from '@utils'
 
 const initialState: ITodoState = {
   todos: [],
@@ -8,7 +9,7 @@ const initialState: ITodoState = {
   status: 'idle',
   startPage: 1,
   limit: 4,
-  filterType: {}
+  filterType: { user_id: getUserID() }
 }
 
 interface IPaginateParams {
@@ -21,6 +22,11 @@ interface IDeleteTodoParams {
   _id: string
   startPage: number
   limit: number
+  filterType: ITodosFilter
+}
+
+interface IStartPagePayload {
+  startPage: number
 }
 
 export const getTodos = createAsyncThunk('todo/getTodos', async () => {
@@ -28,8 +34,8 @@ export const getTodos = createAsyncThunk('todo/getTodos', async () => {
   return response
 })
 
-export const addTodo = createAsyncThunk('todo/addTodo', async (todo: ITodoAPI) => {
-  const response = await todoApi.addTodo(todo)
+export const addTodo = createAsyncThunk('todo/addTodo', async (params: any) => {
+  const response = await todoApi.addTodo(params)
   return response
 })
 
@@ -39,25 +45,24 @@ export const updateTodo = createAsyncThunk('todo/updateTodo', async (todo: ITodo
 })
 
 export const deleteTodo = createAsyncThunk('todo/deleteTodo', async (params: IDeleteTodoParams) => {
-  const response = await todoApi.deleteTodo(params._id, params.startPage, params.limit)
+  const response = await todoApi.deleteTodo(params._id, params.startPage, params.limit, params.filterType)
   return response
 })
 
 export const paginateTodos = createAsyncThunk('todo/paginateTodos', async (params: IPaginateParams) => {
   const response = await todoApi.paginateTodos(params.startPage, params.limit, params.filterType)
-  params
-  return response
-})
 
-export const filterTodos = createAsyncThunk('todo/filterTodos', async (type: ITodoFilter) => {
-  const response = await todoApi.filterTodos(type)
   return response
 })
 
 export const todoSlice = createSlice({
   name: 'todo',
   initialState,
-  reducers: {},
+  reducers: {
+    handleStartPage: (state, action: PayloadAction<IStartPagePayload>) => {
+      state.startPage = action.payload.startPage
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(getTodos.pending, (state) => {
       state.status = 'loading'
@@ -91,7 +96,6 @@ export const todoSlice = createSlice({
       state.status = 'idle'
       const todoIdx = state.todos.findIndex((todo) => todo._id === action.payload.data._id)
       state.todos[todoIdx] = action.payload.data
-      state.totalTodos = action.payload.totalTodos
     })
     builder.addCase(updateTodo.rejected, (state) => {
       state.status = 'failed'
@@ -99,6 +103,7 @@ export const todoSlice = createSlice({
 
     builder.addCase(deleteTodo.pending, (state) => {
       state.status = 'loading'
+      state.limit -= 1
     })
     builder.addCase(deleteTodo.fulfilled, (state, action) => {
       state.status = 'idle'
@@ -108,6 +113,8 @@ export const todoSlice = createSlice({
         return dateB.getTime() - dateA.getTime()
       })
       state.totalTodos = action.payload.totalTodos
+      state.limit = action.payload.limit
+      state.startPage = action.payload.startPage
     })
     builder.addCase(deleteTodo.rejected, (state) => {
       state.status = 'failed'
@@ -118,32 +125,27 @@ export const todoSlice = createSlice({
     })
     builder.addCase(paginateTodos.fulfilled, (state, action) => {
       state.status = 'idle'
-      state.todos = action.payload.data.sort((a, b) => {
-        const dateA = new Date(a.createdAt)
-        const dateB = new Date(b.createdAt)
-        return dateB.getTime() - dateA.getTime()
-      })
-      state.totalTodos = action.payload.totalTodos
-      state.startPage = action.payload.startPage
-      state.limit = action.payload.limit
-      state.filterType = action.payload.filterType
+      if (action.payload.data.length === 0) {
+        state.todos = []
+        state.totalTodos = 0
+      } else {
+        state.todos = action.payload.data.sort((a, b) => {
+          const dateA = new Date(a.createdAt)
+          const dateB = new Date(b.createdAt)
+          return dateB.getTime() - dateA.getTime()
+        })
+        state.totalTodos = action.payload.totalTodos
+        state.startPage = action.payload.startPage
+        state.limit = action.payload.limit
+        state.filterType = action.payload.filterType
+      }
     })
     builder.addCase(paginateTodos.rejected, (state) => {
       state.status = 'failed'
     })
-
-    builder.addCase(filterTodos.pending, (state) => {
-      state.status = 'loading'
-    })
-    builder.addCase(filterTodos.fulfilled, (state, action) => {
-      state.status = 'idle'
-      state.todos = action.payload.data
-      state.totalTodos = action.payload.totalTodos
-    })
-    builder.addCase(filterTodos.rejected, (state) => {
-      state.status = 'failed'
-    })
   }
 })
+
+export const { handleStartPage } = todoSlice.actions
 
 export default todoSlice.reducer

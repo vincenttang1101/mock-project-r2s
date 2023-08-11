@@ -9,15 +9,26 @@ export const addTodo: RequestHandler = async (req: Request, res: Response) => {
       priority: string()
         .oneOf(['Low', 'Medium', 'High'], 'Priority must be either Low, Medium, or High')
         .required('Priority is a required field'),
-      isCompleted: boolean().required('isCompleted is a required field')
+      isCompleted: boolean().required('isCompleted is a required field'),
+      user_id: string().required('User ID is a required field')
     })
 
     await todoSchema.validate(req.body, { abortEarly: false })
 
+    let filterType: any = { user_id: req.body.user_id }
+
     const newTodo = new Todo(req.body)
     await newTodo.save()
 
-    const totalTodos = await Todo.countDocuments()
+    if (req.body.filterType.priority === 'Low') {
+      filterType.priority = req.body.priority
+    } else if (req.body.filterType.priority === 'Medium') {
+      filterType.priority = req.body.priority
+    } else if (req.body.filterType.priority === 'High') {
+      filterType.priority = req.body.priority
+    }
+
+    const totalTodos = await Todo.countDocuments(filterType)
 
     return res.status(200).json({ message: 'Todo added successfully', data: newTodo, totalTodos })
   } catch (err: any) {
@@ -36,9 +47,8 @@ export const updateTodo: RequestHandler = async (req: Request, res: Response) =>
   try {
     const { id } = req.params
     const todo = await Todo.findByIdAndUpdate(id, req.body, { new: true })
-    const totalTodos = await Todo.countDocuments()
 
-    return res.status(200).json({ message: 'Todo updated successfully', data: todo, totalTodos })
+    return res.status(200).json({ message: 'Todo updated successfully', data: todo })
   } catch (err: any) {
     return res.status(500).json({ message: err.message })
   }
@@ -47,21 +57,55 @@ export const updateTodo: RequestHandler = async (req: Request, res: Response) =>
 export const deleteTodo: RequestHandler = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    await Todo.findByIdAndDelete(id)
 
-    const startPage = Number(req.query.startPage) || 1
-    const limit = Number(req.query.limit) || 4
+    let startPageClient = Number(req.query.startPage) || 1
+    let limitClient = Number(req.query.limit) || 4
+    let filterTypeClient = req.query.filterType
+    let valueFilterTypeClient = req.query.value
+    var filterType: any = {}
 
-    const totalTodos = await Todo.countDocuments()
+    filterType[filterTypeClient] = valueFilterTypeClient
 
-    let skip = totalTodos - startPage * limit
+    await Todo.findById(id).then((todo: any) => {
+      filterType.user_id = todo.user_id
+    })
 
-    if (skip < 0) {
+    const handleFilterType = Object.entries(filterType).reduce((acc, [key, value]) => {
+      if (value !== 'undefined') {
+        acc[key] = value
+      }
+      return acc
+    }, {})
+
+    let totalTodos = await Todo.countDocuments(handleFilterType)
+
+    const initialLimit = 4
+    let tototalPages = Math.ceil(totalTodos / initialLimit)
+    let skip
+
+    if (startPageClient === tototalPages) {
       skip = 0
-    }
-    const todos = await Todo.find().skip(skip).limit(limit)
+      startPageClient = limitClient === 1 ? startPageClient - 1 : startPageClient
+      limitClient = limitClient === 1 ? initialLimit : limitClient - 1
 
-    return res.status(200).json({ message: 'Todo deleted successfully', data: todos, totalTodos })
+      await Todo.findByIdAndDelete(id)
+      totalTodos = await Todo.countDocuments(handleFilterType)
+    } else {
+      const todo = await Todo.findByIdAndDelete(id)
+      filterType.user_id = todo?.user_id
+
+      totalTodos = await Todo.countDocuments(handleFilterType)
+      skip = totalTodos - startPageClient * limitClient
+    }
+
+    const todos = await Todo.find(handleFilterType).skip(skip).limit(limitClient)
+    return res.status(200).json({
+      message: 'Todo deleted successfully',
+      data: todos,
+      totalTodos: totalTodos,
+      limit: limitClient,
+      startPage: startPageClient
+    })
   } catch (err: any) {
     return res.status(500).json({ message: err.message })
   }
@@ -80,34 +124,44 @@ export const getTodos: RequestHandler = async (req: Request, res: Response) => {
 
 export const paginateTodos: RequestHandler = async (req: Request, res: Response) => {
   try {
-    const startPage = Number(req.query.startPage) || 1
-    let limit = Number(req.query.limit) || 4
+    const paginationSchema = object().shape({
+      user_id: string().required('User ID is a required field')
+    })
 
-    let filterType: object = {}
+    await paginationSchema.validate(req.body, { abortEarly: false })
+    const startPage = Number(req.query.startPage) || 1
+    let limitClient = Number(req.query.limit) || 4
+
+    let filterType: any = { user_id: req.body.user_id }
 
     if (req.body.isCompleted) {
-      filterType = { isCompleted: req.body.isCompleted }
+      filterType.isCompleted = req.body.isCompleted
     } else if (req.body.priority) {
-      filterType = { priority: req.body.priority }
-    } else {
-      filterType = {}
+      filterType.priority = req.body.priority
     }
 
     const totalTodos = await Todo.countDocuments(filterType)
-    let skip = totalTodos - startPage * limit
+    if (totalTodos === 0) return res.status(200).json({ message: 'Paginate Todos', data: [] })
 
-    if (skip < 0) {
+    const initialLimit = 4
+    const tototalPages = Math.ceil(totalTodos / initialLimit)
+
+    let skip
+
+    if (startPage === tototalPages) {
       skip = 0
-      limit = totalTodos % limit
-    }
+    } else skip = totalTodos - startPage * limitClient
 
-    const todos = await Todo.find(filterType).skip(skip).limit(limit)
+    const todos = await Todo.find(filterType).skip(skip).limit(limitClient)
 
-    return res.status(200).json({ message: 'Paginate Todos', data: todos, totalTodos, startPage, limit, filterType })
+    return res
+      .status(200)
+      .json({ message: 'Paginate Todos', data: todos, totalTodos, startPage, limit: limitClient, filterType })
   } catch (err: any) {
     return res.status(500).json({ message: err.message })
   }
 }
+
 export const filterTodos: RequestHandler = async (req: Request, res: Response) => {
   try {
     let filter: object = {}

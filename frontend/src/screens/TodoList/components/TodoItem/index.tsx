@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BsFillPencilFill, BsTrashFill } from 'react-icons/bs'
 import { BiSave } from 'react-icons/bi'
 import { MdOutlineCancel } from 'react-icons/md'
@@ -16,13 +16,15 @@ interface ITodoItem {
 
 export const TodoItem = ({ todo }: ITodoItem) => {
   const [isEditing, setIsEditing] = useState(false)
+  const [selectedPriority, setSelectedPriority] = useState<string>('Priority')
 
   const startPage = useAppSelector((state) => state.todo.startPage)
   const limit = useAppSelector((state) => state.todo.limit)
+  const filterType = useAppSelector((state) => state.todo.filterType)
 
   const dispatch = useAppDispatch()
 
-  const formikUpdate = useFormik({
+  const formikTodo = useFormik({
     initialValues: {
       _id: todo._id,
       title: todo.title,
@@ -39,6 +41,8 @@ export const TodoItem = ({ todo }: ITodoItem) => {
       dispatch(updateTodo(todo))
     }
   })
+
+  const initialValuesRef = useRef(formikTodo.initialValues)
 
   const handleSwitchPriority = (priority: string) => {
     switch (priority) {
@@ -58,42 +62,61 @@ export const TodoItem = ({ todo }: ITodoItem) => {
 
     dispatch(
       updateTodo({
-        _id: formikUpdate.values._id,
+        _id: formikTodo.values._id,
         isCompleted: target.checked
       })
     )
 
-    formikUpdate.handleChange(e)
+    formikTodo.handleChange(e)
   }
 
   const handleToggleEditSave = () => {
     if (isEditing) {
-      formikUpdate.validateForm().then((errors) => {
+      formikTodo.validateForm().then((errors) => {
         if (Object.keys(errors).length === 0) {
           setIsEditing(false)
         }
-        formikUpdate.submitForm()
+        formikTodo.submitForm()
       })
     } else {
+      initialValuesRef.current = formikTodo.values
       setIsEditing(true)
     }
   }
 
   const handleToggleRemoveCancel = () => {
     if (isEditing) {
+      formikTodo.setValues(initialValuesRef.current)
       setIsEditing(false)
     } else {
-      if (formikUpdate.values._id) {
-        const params = { _id: formikUpdate.values._id, startPage, limit }
+      if (formikTodo.values._id) {
+        const params = { _id: formikTodo.values._id, startPage, limit, filterType }
         dispatch(deleteTodo(params))
       }
     }
   }
 
+  useEffect(() => {
+    switch (filterType?.priority) {
+      case 'Low':
+        setSelectedPriority('Low')
+        formikTodo.setFieldValue('priority', 'Low')
+        break
+      case 'Medium':
+        setSelectedPriority('Medium')
+        formikTodo.setFieldValue('priority', 'Medium')
+        break
+      case 'High':
+        setSelectedPriority('High')
+        formikTodo.setFieldValue('priority', 'High')
+        break
+    }
+  }, [filterType])
+
   return (
     <li className={style['todo']}>
       <form
-        onSubmit={formikUpdate.handleSubmit}
+        onSubmit={formikTodo.handleSubmit}
         className={`${style['todo__task']} ${isEditing && style['todo__task--isEditing']}`}
       >
         <div className={style['task__left']}>
@@ -103,7 +126,7 @@ export const TodoItem = ({ todo }: ITodoItem) => {
             name='isCompleted'
             className={style['task__check']}
             style={{ fontSize: '1.1rem', border: '1px solid gray' }}
-            checked={formikUpdate.values.isCompleted}
+            checked={formikTodo.values.isCompleted}
             onChange={handleCheckedChange}
           />
           {!isEditing ? (
@@ -123,25 +146,32 @@ export const TodoItem = ({ todo }: ITodoItem) => {
                 field='Input'
                 type='text'
                 name='title'
-                onChange={formikUpdate.handleChange}
-                value={formikUpdate.values.title}
+                onChange={formikTodo.handleChange}
+                value={formikTodo.values.title}
               />
-              {formikUpdate.touched.title && formikUpdate.errors.title ? (
-                <span style={{ color: 'red' }}>{formikUpdate.errors.title}</span>
+              {formikTodo.touched.title && formikTodo.errors.title ? (
+                <span style={{ color: 'red' }}>{formikTodo.errors.title}</span>
               ) : null}
               <FormField
                 field='Select'
                 name='priority'
-                onChange={formikUpdate.handleChange}
-                value={formikUpdate.values.priority}
+                onChange={formikTodo.handleChange}
+                value={formikTodo.values.priority}
               >
-                <option value=''>Piority</option>
-                <option value='Low'>Low</option>
-                <option value='Medium'>Medium</option>
-                <option value='High'>High</option>
+                {selectedPriority === 'Priority' && (
+                  <>
+                    <option value=''>Piority</option>
+                    <option value='Low'>Low</option>
+                    <option value='Medium'>Medium</option>
+                    <option value='High'>High</option>
+                  </>
+                )}
+                {selectedPriority === 'Low' && <option value='Low'>Low</option>}
+                {selectedPriority === 'Medium' && <option value='Medium'>Medium</option>}
+                {selectedPriority === 'High' && <option value='High'>High</option>}
               </FormField>
-              {formikUpdate.touched.priority && formikUpdate.errors.priority ? (
-                <span style={{ color: 'red' }}>{formikUpdate.errors.priority}</span>
+              {formikTodo.touched.priority && formikTodo.errors.priority ? (
+                <span style={{ color: 'red' }}>{formikTodo.errors.priority}</span>
               ) : null}
             </div>
           )}
