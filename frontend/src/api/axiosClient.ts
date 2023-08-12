@@ -37,7 +37,7 @@ axiosClient.interceptors.response.use(
     if (error.response && error.response.data && error.response.data.message === 'Token expired') {
       localStorage.removeItem(ACCESS_TOKEN)
       alert('Token expired')
-      window.location.replace('/login')
+      window.location.href = '/login'
     }
     return Promise.reject(error)
   }
