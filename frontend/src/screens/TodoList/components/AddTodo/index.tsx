@@ -14,6 +14,7 @@ export const AddTodo = () => {
 
   const startPage = useAppSelector((state) => state.todo.startPage)
   const filterType = useAppSelector((state) => state.todo.filterType)
+
   const dispatch = useAppDispatch()
 
   const formikAdd = useFormik({
@@ -36,7 +37,7 @@ export const AddTodo = () => {
       resetForm()
       formikAdd.setFieldValue('priority', params.filterType.priority)
 
-      if (!filterType.priority || filterType.isCompleted) {
+      if (!filterType.priority || !filterType.isCompleted) {
         resetForm()
       }
     }
@@ -71,7 +72,7 @@ export const AddTodo = () => {
         formikAdd.setFieldValue('priority', 'priority')
         break
     }
-  }, [filterType, startPage, dispatch])
+  }, [filterType, startPage])
 
   return (
     <form onSubmit={formikAdd.handleSubmit} className={style['addTodo']}>

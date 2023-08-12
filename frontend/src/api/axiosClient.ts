@@ -22,12 +22,6 @@ axiosClient.interceptors.request.use(
   },
   function (error) {
     // Do something with request error
-    const navigate = useNavigate()
-    if (error.response && error.response.data && error.response.data.message === 'Token expired') {
-      localStorage.removeItem('access-token')
-      alert('Token expired')
-      navigate('/login')
-    }
     return Promise.reject(error)
   }
 )
@@ -40,6 +34,11 @@ axiosClient.interceptors.response.use(
     return response.data
   },
   function (error) {
+    if (error.response && error.response.data && error.response.data.message === 'Token expired') {
+      localStorage.removeItem(ACCESS_TOKEN)
+      alert('Token expired')
+      window.location.href = '/login'
+    }
     return Promise.reject(error)
   }
 )

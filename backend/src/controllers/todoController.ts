@@ -141,7 +141,7 @@ export const paginateTodos: RequestHandler = async (req: Request, res: Response)
     }
 
     const totalTodos = await Todo.countDocuments(filterType)
-    if (totalTodos === 0) return res.status(200).json({ message: 'Paginate Todos', data: [] })
+    if (totalTodos === 0) return res.status(200).json({ message: 'Paginate Todos', data: [], filterType })
 
     const initialLimit = 4
     const tototalPages = Math.ceil(totalTodos / initialLimit)
