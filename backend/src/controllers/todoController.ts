@@ -62,15 +62,20 @@ export const updateTodo: RequestHandler = async (req: Request, res: Response) =>
     await todoSchema.validate(req.body, { abortEarly: false })
 
     const { id } = req.params
+    const { title, priority, user_id } = req.body
 
-    const todoExists = await Todo.findOne({ title: req.body.title, user_id: req.body.user_id })
+    const todoExists = await Todo.findOne({ title, user_id })
 
-    if (todoExists) {
+    if (todoExists && priority !== todoExists.priority) {
+      const todo = await Todo.findByIdAndUpdate(id, req.body, { new: true })
+      return res.status(200).json({ message: 'Todo updated successfully', data: todo })
+    }
+
+    if (todoExists && priority === todoExists.priority) {
       return res.status(500).json({ message: 'Title already exists' })
     }
 
     const todo = await Todo.findByIdAndUpdate(id, req.body, { new: true })
-
     return res.status(200).json({ message: 'Todo updated successfully', data: todo })
   } catch (err: any) {
     return res.status(500).json({ message: err.message })

@@ -39,7 +39,6 @@ axiosClient.interceptors.response.use(
     ) {
       alert(error.response.data.message)
     } else if (error.response.data.message === 'Token expired' || error.response.data.message === 'Unauthorized') {
-      window.location.href = '/login'
       localStorage.removeItem(ACCESS_TOKEN)
       window.location.href = '/login'
     } else if (error.response.data.message === 'Title already exists') {

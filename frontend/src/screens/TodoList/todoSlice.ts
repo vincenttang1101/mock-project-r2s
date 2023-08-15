@@ -1,6 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import todoApi from '@api/todoApi'
-import { ITodo, ITodoAPI, ITodoState, ITodosFilter } from '@typing'
+import { IAddTodoParams, IUpdateTodoParams, IDeleteTodoParams, ITodoState } from '@typing'
 import { getUserID } from '@utils'
 
 const initialState: ITodoState = {
@@ -19,13 +19,6 @@ interface IPaginateParams {
   filterType: object
 }
 
-interface IDeleteTodoParams {
-  _id: string
-  startPage: number
-  limit: number
-  filterType: ITodosFilter
-}
-
 interface IStartPagePayload {
   startPage: number
 }
@@ -39,18 +32,18 @@ export const getTodos = createAsyncThunk('todo/getTodos', async () => {
   return response
 })
 
-export const addTodo = createAsyncThunk('todo/addTodo', async (params: any) => {
+export const addTodo = createAsyncThunk('todo/addTodo', async (params: IAddTodoParams) => {
   const response = await todoApi.addTodo(params)
   return response
 })
 
-export const updateTodo = createAsyncThunk('todo/updateTodo', async (todo: ITodoAPI | any) => {
+export const updateTodo = createAsyncThunk('todo/updateTodo', async (todo: IUpdateTodoParams) => {
   const response = await todoApi.updateTodo(todo)
   return response
 })
 
 export const deleteTodo = createAsyncThunk('todo/deleteTodo', async (params: IDeleteTodoParams) => {
-  const response = await todoApi.deleteTodo(params._id, params.startPage, params.limit, params.filterType)
+  const response = await todoApi.deleteTodo(params)
   return response
 })
 
