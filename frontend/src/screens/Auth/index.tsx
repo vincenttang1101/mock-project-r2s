@@ -33,15 +33,12 @@ export const Auth = ({ type }: IType) => {
       password: string().required('Password is a required field')
     }),
     onSubmit: (values, { resetForm }) => {
-      userApi
-        .loginUser(values)
-        .then((response) => {
-          localStorage.setItem(ACCESS_TOKEN, response.accessToken!)
-          localStorage.setItem('user_id', response.data._id!)
-          resetForm()
-          navigate('/')
-        })
-        .catch((error) => alert(error.response.data.message))
+      userApi.loginUser(values).then((response) => {
+        localStorage.setItem(ACCESS_TOKEN, response.accessToken!)
+        localStorage.setItem('user_id', response.data._id!)
+        resetForm()
+        navigate('/')
+      })
     }
   })
 
@@ -68,13 +65,10 @@ export const Auth = ({ type }: IType) => {
         .oneOf([ref('password')], 'Your passwords do not match.')
     }),
     onSubmit: (values, { resetForm }) => {
-      userApi
-        .registerUser(values)
-        .then(() => {
-          resetForm()
-          navigate('/login')
-        })
-        .catch((error) => alert(error.response.data.errors.email))
+      userApi.registerUser(values).then(() => {
+        resetForm()
+        navigate('/login')
+      })
     }
   })
 
@@ -108,8 +102,8 @@ export const Auth = ({ type }: IType) => {
               <span style={{ color: 'red' }}>{formikLogin.errors.password}</span>
             ) : null}
             <span>
-              Don't have an account?
-              <Link to='/register' style={{ textDecoration: 'none' }}>
+              Don't have an account?{' '}
+              <Link to='/register' style={{ textDecoration: 'none' }} onClick={() => formikLogin.resetForm()}>
                 Register
               </Link>
             </span>

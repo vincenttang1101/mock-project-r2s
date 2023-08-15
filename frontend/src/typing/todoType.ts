@@ -13,6 +13,7 @@ export interface ITodoAPI {
   isCompleted: boolean
   createdAt: string
   updatedAt: string
+  message?: string
 }
 
 export interface ITodosFilter {
@@ -28,4 +29,5 @@ export interface ITodoState {
   startPage: number
   limit: number
   filterType: ITodosFilter
+  message: string
 }

@@ -9,7 +9,8 @@ const initialState: ITodoState = {
   status: 'idle',
   startPage: 1,
   limit: 4,
-  filterType: { user_id: getUserID() }
+  filterType: { user_id: getUserID() },
+  message: 'null'
 }
 
 interface IPaginateParams {
@@ -27,6 +28,10 @@ interface IDeleteTodoParams {
 
 interface IStartPagePayload {
   startPage: number
+}
+
+interface IStatusPayload {
+  status: 'idle' | 'loading' | 'failed'
 }
 
 export const getTodos = createAsyncThunk('todo/getTodos', async () => {
@@ -60,6 +65,9 @@ export const todoSlice = createSlice({
   reducers: {
     handleStartPage: (state, action: PayloadAction<IStartPagePayload>) => {
       state.startPage = action.payload.startPage
+    },
+    handleStatus: (state, action: PayloadAction<IStatusPayload>) => {
+      state.status = action.payload.status
     }
   },
   extraReducers: (builder) => {
@@ -93,6 +101,7 @@ export const todoSlice = createSlice({
     })
     builder.addCase(updateTodo.fulfilled, (state, action) => {
       state.status = 'idle'
+      state.message = action.payload.message!
       const todoIdx = state.todos.findIndex((todo) => todo._id === action.payload.data._id)
       state.todos[todoIdx] = action.payload.data
     })
@@ -145,6 +154,6 @@ export const todoSlice = createSlice({
   }
 })
 
-export const { handleStartPage } = todoSlice.actions
+export const { handleStartPage, handleStatus } = todoSlice.actions
 
 export default todoSlice.reducer
