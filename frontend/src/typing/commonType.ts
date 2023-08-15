@@ -5,4 +5,5 @@ export interface IDataResponse<T> {
   limit: number
   filterType: object
   accessToken: string
+  message?: string
 }

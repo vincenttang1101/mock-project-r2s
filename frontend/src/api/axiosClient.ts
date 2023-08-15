@@ -1,6 +1,5 @@
-import { ACCESS_TOKEN, API_BASE_URL } from '@constants'
 import axios, { InternalAxiosRequestConfig, AxiosResponse } from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { ACCESS_TOKEN, API_BASE_URL } from '@constants'
 
 const axiosClient = axios.create({
   baseURL: API_BASE_URL,
@@ -34,11 +33,19 @@ axiosClient.interceptors.response.use(
     return response.data
   },
   function (error) {
-    if (error.response && error.response.data && error.response.data.message === 'Token expired') {
-      localStorage.removeItem(ACCESS_TOKEN)
-      alert('Token expired')
+    if (
+      error.response.data.message === 'Email already exists' ||
+      error.response.data.message === 'Invalid login credentials'
+    ) {
+      alert(error.response.data.message)
+    } else if (error.response.data.message === 'Token expired' || error.response.data.message === 'Unauthorized') {
       window.location.href = '/login'
+      localStorage.removeItem(ACCESS_TOKEN)
+      window.location.href = '/login'
+    } else if (error.response.data.message === 'Title already exists') {
+      alert(error.response.data.message)
     }
+
     return Promise.reject(error)
   }
 )

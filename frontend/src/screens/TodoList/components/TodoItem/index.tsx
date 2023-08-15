@@ -7,9 +7,10 @@ import { useFormik } from 'formik'
 import { object, string } from 'yup'
 import { useAppDispatch, useAppSelector } from '@app/hook'
 import { FormField } from '@components/FormField'
-import { ITodo } from '@typing'
-import style from './style.module.scss'
 import { deleteTodo, updateTodo } from '@screens/TodoList/todoSlice'
+import { ITodo } from '@typing'
+import { getUserID } from '@utils'
+import style from './style.module.scss'
 
 interface ITodoItem {
   todo: ITodo
@@ -17,11 +18,13 @@ interface ITodoItem {
 
 export const TodoItem = ({ todo }: ITodoItem) => {
   const [isEditing, setIsEditing] = useState(false)
+  const [id, setID] = useState('')
   const [selectedPriority, setSelectedPriority] = useState<string>('Priority')
 
   const startPage = useAppSelector((state) => state.todo.startPage)
   const limit = useAppSelector((state) => state.todo.limit)
   const filterType = useAppSelector((state) => state.todo.filterType)
+  const status = useAppSelector((state) => state.todo.status)
 
   const dispatch = useAppDispatch()
 
@@ -30,7 +33,8 @@ export const TodoItem = ({ todo }: ITodoItem) => {
       _id: todo._id,
       title: todo.title,
       priority: todo.priority,
-      isCompleted: todo.isCompleted
+      isCompleted: todo.isCompleted,
+      user_id: getUserID()
     },
     validationSchema: object({
       title: string().required('Title is a required field').min(3, 'Too short !').max(30, 'Too long !'),
@@ -40,6 +44,7 @@ export const TodoItem = ({ todo }: ITodoItem) => {
     }),
     onSubmit: (todo) => {
       dispatch(updateTodo(todo))
+      setID(todo._id!)
     }
   })
 
@@ -75,9 +80,8 @@ export const TodoItem = ({ todo }: ITodoItem) => {
     if (isEditing) {
       formikTodo.validateForm().then((errors) => {
         if (Object.keys(errors).length === 0) {
-          setIsEditing(false)
+          formikTodo.submitForm()
         }
-        formikTodo.submitForm()
       })
     } else {
       initialValuesRef.current = formikTodo.values
@@ -98,6 +102,7 @@ export const TodoItem = ({ todo }: ITodoItem) => {
   }
 
   useEffect(() => {
+    setIsEditing(false)
     switch (filterType?.priority) {
       case 'Low':
         setSelectedPriority('Low')
@@ -114,9 +119,14 @@ export const TodoItem = ({ todo }: ITodoItem) => {
     }
   }, [filterType])
 
+  useEffect(() => {
+    if (status === 'failed' && todo._id === id) setIsEditing(true)
+    else if (status === 'idle' && todo._id === id) setIsEditing(false)
+  }, [status])
+
   return (
     <li className={style['todo']}>
-      <span className={`${style['todo__createdAt']}`}>{dayjs(todo.createdAt).format('DD//MM/YYYY hh:mm:ss')}</span>
+      <span className={`${style['todo__createdAt']}`}>{dayjs(todo.createdAt).format('DD/MM/YYYY hh:mm:ss')}</span>
       <form
         onSubmit={formikTodo.handleSubmit}
         className={`${style['todo__task']} ${isEditing && style['todo__task--isEditing']}`}

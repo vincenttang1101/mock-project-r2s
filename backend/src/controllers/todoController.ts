@@ -15,6 +15,11 @@ export const addTodo: RequestHandler = async (req: Request, res: Response) => {
 
     await todoSchema.validate(req.body, { abortEarly: false })
 
+    const todoExists = await Todo.findOne({ title: req.body.title, user_id: req.body.user_id })
+    if (todoExists) {
+      return res.status(500).json({ message: 'Title already exists' })
+    }
+
     let filterType: any = { user_id: req.body.user_id }
 
     const newTodo = new Todo(req.body)
@@ -45,7 +50,25 @@ export const addTodo: RequestHandler = async (req: Request, res: Response) => {
 
 export const updateTodo: RequestHandler = async (req: Request, res: Response) => {
   try {
+    const todoSchema = object().shape({
+      title: string().required('Title is a required field').min(3, 'Too short !').max(30, 'Too long !'),
+      priority: string()
+        .oneOf(['Low', 'Medium', 'High'], 'Priority must be either Low, Medium, or High')
+        .required('Priority is a required field'),
+      isCompleted: boolean().required('isCompleted is a required field'),
+      user_id: string().required('User ID is a required field')
+    })
+
+    await todoSchema.validate(req.body, { abortEarly: false })
+
     const { id } = req.params
+
+    const todoExists = await Todo.findOne({ title: req.body.title, user_id: req.body.user_id })
+
+    if (todoExists) {
+      return res.status(500).json({ message: 'Title already exists' })
+    }
+
     const todo = await Todo.findByIdAndUpdate(id, req.body, { new: true })
 
     return res.status(200).json({ message: 'Todo updated successfully', data: todo })
