@@ -24,42 +24,39 @@
          ├── node_modules
          ├── public
          ├── src/
-         │   └── components (common)/
-         │       ├── Header/
-         │       │   ├── index.tsx
-         │       │   └── style.module.scss
-         │       ├── Footer/
-         │       │   ├── index.tsx
-         │       │   └── style.module.scss
-         │       ├── FormField/
-         │       │   ├── index.tsx
-         │       │   └── style.module.scss
-         │       ├── NotFound/
-         │       │   ├── index.tsx
-         │       │   └── style.module.scss
-         │       └── index.ts (entry point)
-         ├── screens/
-         │   ├── TodoList/
-         │   │   ├── components/
-         │   │   │   ├── Title/
-         │   │   │   │   ├── index.tsx
-         │   │   │   │   └── style.module.scss
-         │   │   │   ├── TodoItem/
-         │   │   │   │   ├── index.tsx
-         │   │   │   │   └── style.module.scss
-         │   │   │   └── Paginate/
-         │   │   │       ├── index.tsx
-         │   │   │       └── style.module.scss
-         │   │   ├── index.tsx
-         │   │   └── style.module.scss
-         │   ├── Login/
-         │   │   ├── index.tsx
-         │   │   └── style.module.scss
-         │   ├── Register/
-         │   │   ├── index.tsx
-         │   │   └── style.module.scss
-         │   └── index.ts (entry point)
-         ├── App.tsx
-         ├── App.scss
-         ├── main.tsx
-         └── index.css
+         │   ├── api
+         │   ├── app
+         │   ├── assets
+         │   ├── components (common)/
+         │   │   ├── Footer
+         │   │   ├── FormField
+         │   │   ├── Header
+         │   │   ├── Loader
+         │   │   ├── NotFound
+         │   │   ├── Title
+         │   │   └── index.ts (entry point)
+         │   ├── constants
+         │   ├── screens (features)/
+         │   │   ├── Auth
+         │   │   ├── TodoList
+         │   │   └── index.ts (entry point)
+         │   ├── typing 
+         │   ├── utils
+         │   ├── _mixins.scss
+         │   ├── App.css
+         │   ├── App.tsx
+         │   ├── index.css
+         │   ├── main.tsx
+         │   └── vite-env.d.ts
+         ├── .editorconfig
+         ├── .eslintrc
+         ├── .eslintrc.cjs
+         ├── .gitignore
+         ├── .prettierrc
+         ├── index.html
+         ├── package-lock.json
+         ├── package.json
+         ├── README.md
+         ├── tsconfig.json
+         ├── tsconfig.node.json
+         └── vite.config.ts
