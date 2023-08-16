@@ -60,3 +60,35 @@
          ├── tsconfig.json
          ├── tsconfig.node.json
          └── vite.config.ts
+
+
+      - Section 2: Backend
+         backend/
+         ├── node_modules
+         ├── src/
+         │   ├── controllers/
+         │   │   ├── todoController.ts
+         │   │   ├── userController.ts
+         │   │   └── index.ts (entry point)
+         │   ├── middlewares/
+         │   │   ├── auth.ts
+         │   │   └── index.ts (entry point)
+         │   ├── models/
+         │   │   ├── todoModel.ts
+         │   │   ├── userModel.ts
+         │   │   └── index.ts (entry point)
+         │   ├── routes/
+         │   │   ├── todoRoutes.ts
+         │   │   ├── userRoutes.ts
+         │   │   └── index.ts (entry point)
+         │   ├── typing/
+         │   │   ├── todoType.ts
+         │   │   ├── userType.ts
+         │   │   └── index.ts
+         │   └── app.ts
+         ├── .env
+         ├── .gitignore
+         ├── .prettierrc
+         ├── package-lock.json
+         ├── package.json
+         └── tsconfig.json
