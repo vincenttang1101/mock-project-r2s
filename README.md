@@ -92,3 +92,11 @@
          ├── package-lock.json
          ├── package.json
          └── tsconfig.json
+
+
+## 3/ Setup .env For Backend
+```dotenv
+DB_URL = 
+PORT = 
+JWT_KEY = 
+```
